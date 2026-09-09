@@ -1137,6 +1137,7 @@ install_data(
 
 if build_tests
   _cpp_test_names = [
+    'plugin_api_alias',
     'annotation_document',
     'annotation_raster',
     'animation_manager',

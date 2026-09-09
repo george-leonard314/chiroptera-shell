@@ -1816,6 +1816,10 @@ namespace {
     lua_createtable(L, 0, 0);
     luaL_register(L, nullptr, kChiropteraStringLib);
     lua_setfield(L, -2, "string");
+    // noctalia-compat: plugins written for Noctalia call `noctalia.*`; bind the
+    // same table under that name so they keep working unchanged.
+    lua_pushvalue(L, -1);
+    lua_setglobal(L, "noctalia"); // noctalia-compat
     lua_pop(L, 1);
   }
 } // namespace
