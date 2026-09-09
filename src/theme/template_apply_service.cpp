@@ -22,7 +22,7 @@
 #include <utility>
 #include <vector>
 
-namespace noctalia::theme {
+namespace chiroptera::theme {
 
   namespace {
 
@@ -45,7 +45,7 @@ namespace noctalia::theme {
     std::filesystem::path userTemplateConfigPath() {
       const std::string configDir = FileUtils::configDir();
       if (configDir.empty()) {
-        return "noctalia.toml";
+        return "chiroptera.toml";
       }
       return std::filesystem::path(configDir) / "config.toml";
     }
@@ -148,7 +148,7 @@ namespace noctalia::theme {
       return root;
     }
 
-    // state.toml owner/key holding the built-in template ids Noctalia has applied.
+    // state.toml owner/key holding the built-in template ids Chiroptera has applied.
     constexpr std::string_view kStateOwner = "theme_templates";
     constexpr std::string_view kAppliedBuiltinIdsKey = "applied_builtin_ids";
 
@@ -256,7 +256,7 @@ namespace noctalia::theme {
   }
 
   void TemplateApplyService::registerIpc(IpcService& ipc) {
-    ipc.bind(noctalia::cli::msg::templatesApply, [this](const std::string& args) -> std::string {
+    ipc.bind(chiroptera::cli::msg::templatesApply, [this](const std::string& args) -> std::string {
       if (!StringUtils::trim(args).empty()) {
         return "error: usage: templates-apply\n";
       }
@@ -535,4 +535,4 @@ namespace noctalia::theme {
     return m_shutdown || generation != m_nextGeneration;
   }
 
-} // namespace noctalia::theme
+} // namespace chiroptera::theme

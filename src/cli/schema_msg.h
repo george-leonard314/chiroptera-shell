@@ -6,10 +6,10 @@
 #include <array>
 #include <string_view>
 
-namespace noctalia::cli {
+namespace chiroptera::cli {
 
   inline constexpr std::array<std::string_view, 10> kBuiltinPaletteNames{
-      "Ayu", "Catppuccin", "Dracula", "Eldritch", "Gruvbox", "Kanagawa", "Noctalia", "Nord", "Rosé Pine", "Tokyo-Night",
+      "Ayu", "Catppuccin", "Dracula", "Eldritch", "Gruvbox", "Kanagawa", "Chiroptera", "Nord", "Rosé Pine", "Tokyo-Night",
   };
 
   inline constexpr std::array kMsgColorSchemeSetBuiltinPositionals{
@@ -431,7 +431,7 @@ namespace noctalia::cli {
         false
     };
     inline constexpr Command greeterSync{
-        "greeter-sync", "Sync wallpaper, colors, and monitor layout to Noctalia Greeter", {}, {}, {}, {}, {}, false
+        "greeter-sync", "Sync wallpaper, colors, and monitor layout to Chiroptera Greeter", {}, {}, {}, {}, {}, false
     };
     inline constexpr Command keyboardBacklightDown{
         "keyboard-backlight-down", "Decrease all keyboard backlights by one level", {}, {}, {}, {}, {}, false
@@ -555,7 +555,7 @@ namespace noctalia::cli {
         false
     };
     inline constexpr Command notificationShow{"notification-show",
-                                              "Show an internal Noctalia notification",
+                                              "Show an internal Chiroptera notification",
                                               {},
                                               {},
                                               {},
@@ -949,4 +949,4 @@ namespace noctalia::cli {
     return nullptr;
   }
 
-} // namespace noctalia::cli
+} // namespace chiroptera::cli

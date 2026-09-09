@@ -1,10 +1,10 @@
 #include "shell/bar/widgets/notification_widget_definition.h"
 
-const noctalia::bar::WidgetDefinition<NotificationWidget::Options>& notificationWidgetDefinition() {
-  using noctalia::bar::field;
+const chiroptera::bar::WidgetDefinition<NotificationWidget::Options>& notificationWidgetDefinition() {
+  using chiroptera::bar::field;
   using Options = NotificationWidget::Options;
 
-  static const noctalia::bar::WidgetDefinition<Options> definition{
+  static const chiroptera::bar::WidgetDefinition<Options> definition{
       .type = "notifications",
       .fields = {
           field<&Options::hideWhenNoUnread>({

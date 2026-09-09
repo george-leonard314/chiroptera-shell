@@ -9,7 +9,7 @@ sidebar:
 import PluginApiBadge from '../../../../../components/PluginApiBadge.astro';
 
 Desktop widgets, panels, and (optionally) bar widgets do not have to patch a fixed control. They can describe their UI
-as a retained `ui.*` tree; Noctalia diffs each render against the previous tree and updates native controls in place.
+as a retained `ui.*` tree; Chiroptera diffs each render against the previous tree and updates native controls in place.
 
 ## `desktopWidget.*` - declarative desktop widget UI {#desktopwidget--declarative-desktop-widget-ui}
 
@@ -19,7 +19,7 @@ every desktop-widget script); each takes a props table and an optional children 
 `render(tree)` · `setWantsSecondTicks(bool)` · `setNeedsFrameTick(bool)`
 
 ```lua
-local color = noctalia.getConfig("color")
+local color = chiroptera.getConfig("color")
 
 function update()
   desktopWidget.setWantsSecondTicks(true) -- tick update() on second boundaries
@@ -32,7 +32,7 @@ function update()
 end
 
 function ping()
-  noctalia.notify("Desktop widget", "button clicked")
+  chiroptera.notify("Desktop widget", "button clicked")
 end
 ```
 
@@ -51,7 +51,7 @@ to size it explicitly).
 |-------------|-------|
 | `ui.column` / `ui.row` | `gap`, `padding`, `paddingH`, `paddingV`, `align` (`start`/`center`/`end`/`stretch`), `justify` (`start`/`center`/`end`/`space_between`), `fill`, `radius`, `border`, `borderWidth`, `minWidth`, `minHeight`, `onClick`, `onHover` |
 | `ui.scroll` | a vertically scrolling container; same layout props as a column plus `fill`, `radius`, `border`, `borderWidth`, `stickToBottom` (bool), `onScroll`, `scrollToBottomRev` (number - see below) |
-| `ui.label` | `text`, `fontSize`, `color`, `fontWeight` (`thin`…`heavy`), `fontFamily` (a family name; load a file with `noctalia.loadFont`), `baseline` (`text`/`textFixedHeight`/`inkCentered`/`pictographic`), `maxWidth`, `maxLines`, `textAlign` |
+| `ui.label` | `text`, `fontSize`, `color`, `fontWeight` (`thin`…`heavy`), `fontFamily` (a family name; load a file with `chiroptera.loadFont`), `baseline` (`text`/`textFixedHeight`/`inkCentered`/`pictographic`), `maxWidth`, `maxLines`, `textAlign` |
 | `ui.markdown` | `text` (markdown source - see below), `width`, `height` |
 | `ui.glyph` | `name` (Tabler/Nerd-Font glyph), `size`, `color` |
 | `ui.image` | `path` (plugin-relative, `~`, or absolute), `width`, `height`, `radius`, `fit` (`contain`/`cover`/`stretch`), `border`, `borderWidth`, `onClick`, `onHover` |
@@ -174,7 +174,7 @@ prop is logged and skipped - typos surface in the log instead of failing silentl
   owns the text as the user types - re-rendering never overwrites it. Read edits through `onChange`/`onSubmit`, and give
   the input a stable `key` so it keeps its text across renders.
 - **Identity**: give list children a `key` prop so reordering reuses the same native controls.
-- **Images**: `ui.image` loads **local files only** - download remote previews with `noctalia.download(url, dest, cb)`
+- **Images**: `ui.image` loads **local files only** - download remote previews with `chiroptera.download(url, dest, cb)`
   first, then pass the saved path.
 - **Glyph-only buttons**: when only `glyph` is set, any previous `text` is cleared so retained buttons do not keep
   stale labels across re-renders.
@@ -214,7 +214,7 @@ Bar-specific constraints:
   warning. Pointer controls (`ui.button`, `ui.toggle`, `ui.slider`, `ui.progress`, `ui.graph`, …) work.
 - **Clicks compose**: an inline control consumes its own clicks; the widget-level `onClick`/`onRightClick` still fire
   for the rest of the capsule (and its padding).
-- Ticks stay on `noctalia.setUpdateInterval` - there is no frame-tick API in the bar.
+- Ticks stay on `chiroptera.setUpdateInterval` - there is no frame-tick API in the bar.
 
 The `declarative` widget in the official `noctalia/example` plugin is the reference implementation.
 
@@ -318,7 +318,7 @@ requires `dismiss_on_outside_click = false`. Requires <PluginApiBadge feature="k
 
 Normally the shell keeps one panel open at a time: opening the control center closes yours. A panel with
 `persistent = true` lives outside that slot, so it stays on screen until an explicit toggle, `panel.close()`, or
-`noctalia ipc panel-close <id>` dismisses it. Several persistent panels can be open at once, alongside a normal
+`chiroptera ipc panel-close <id>` dismisses it. Several persistent panels can be open at once, alongside a normal
 panel. Requires <PluginApiBadge feature="persistent-panel" />.
 
 Persistent panels trade away the features that only make sense for a transient pop-up:
@@ -382,7 +382,7 @@ end
 ```
 
 `chord` is the exact string from the manifest, so match on what you declared rather than on a key name the host
-invented. Chord syntax is the same as elsewhere in Noctalia (`space`, `ctrl+r`, `shift+Return`).
+invented. Chord syntax is the same as elsewhere in Chiroptera (`space`, `ctrl+r`, `shift+Return`).
 
 Constraints worth knowing before designing around it:
 
@@ -392,9 +392,9 @@ Constraints worth knowing before designing around it:
   `onKey`, so a `capture_keys = ["space"]` panel with a text field still gets spaces typed normally.
 - **Escape always dismisses.** The panel-close action stays with the host and cannot be captured, so a panel can never
   make itself impossible to close from the keyboard. This tracks the user's own
-  [Cancel keybind](/noctalia/configuration/shell/#keybinds), so rebinding it keeps working.
+  [Cancel keybind](/chiroptera/configuration/shell/#keybinds), so rebinding it keeps working.
 - **A captured chord outranks the shell navigation keybinds, inside that panel only.** Capture is checked before the
-  keybind actions in [`[keybinds]`](/noctalia/configuration/shell/#keybinds) are applied, so `capture_keys = ["space"]` means
+  keybind actions in [`[keybinds]`](/chiroptera/configuration/shell/#keybinds) are applied, so `capture_keys = ["space"]` means
   space no longer triggers Validate on a focused control while that panel is up. Cancel is the one exception. Nothing
   changes for other panels or the rest of the shell.
 - **Capturing is declared, not decided.** The script runs off the main thread, so it cannot answer "did you consume
@@ -455,16 +455,16 @@ function onToggle(value) enabled = value == "true"; render() end
 function onCloseClicked() panel.close() end
 ```
 
-From a widget or shortcut script, toggle a panel by its full entry id with `noctalia.togglePanel("author/plugin:panel")`.
+From a widget or shortcut script, toggle a panel by its full entry id with `chiroptera.togglePanel("author/plugin:panel")`.
 The same panel can also be opened, closed, or toggled externally over IPC:
 
 ```sh
-noctalia msg panel-toggle noctalia/example:panel
+chiroptera msg panel-toggle noctalia/example:panel
 ```
 
 The reference implementation is the `panel` entry of the official `noctalia/example` plugin - a settings-style panel
 exercising every interactive control. `noctalia/wallhaven:browser` is a network-backed panel (thumbnail grid, filters,
-download + apply via `noctalia.wallpaperDirectory()` and `noctalia.setWallpaper()`).
+download + apply via `chiroptera.wallpaperDirectory()` and `chiroptera.setWallpaper()`).
 
 ## Drag and drop (panels only) {#drag-and-drop-panels-only}
 

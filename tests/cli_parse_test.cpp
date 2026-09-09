@@ -25,21 +25,21 @@ namespace {
 
   constexpr std::array<std::string_view, 2> kModeChoices{"dark", "light"};
   constexpr std::array kFlags{
-      noctalia::cli::Flag{"--output", "-o", "<file>", "Output file", {}, {}, false, false},
-      noctalia::cli::Flag{"--verbose", "-v", {}, "Verbose", {}, {}, false, false},
-      noctalia::cli::Flag{"--render", "-r", "<spec>", "Render mapping", {}, {}, true, false},
-      noctalia::cli::Flag{"--mode", {}, "<mode>", "Mode", kModeChoices, "dark", false, false},
+      chiroptera::cli::Flag{"--output", "-o", "<file>", "Output file", {}, {}, false, false},
+      chiroptera::cli::Flag{"--verbose", "-v", {}, "Verbose", {}, {}, false, false},
+      chiroptera::cli::Flag{"--render", "-r", "<spec>", "Render mapping", {}, {}, true, false},
+      chiroptera::cli::Flag{"--mode", {}, "<mode>", "Mode", kModeChoices, "dark", false, false},
   };
   constexpr std::array kPositionals{
-      noctalia::cli::Positional{"input", "Input", {}, true, false, false},
+      chiroptera::cli::Positional{"input", "Input", {}, true, false, false},
   };
-  constexpr noctalia::cli::Command kCommand{
+  constexpr chiroptera::cli::Command kCommand{
       "sample", "Sample", {}, {}, kFlags, kPositionals, {}, false,
   };
 
   void checkFlags() {
     Args args{"-v", "--output=result.json", "--render", "a:b", "-r", "c:d", "--mode", "light", "input.png"};
-    auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
     TEST_CHECK(parsed.has_value());
     TEST_CHECK(parsed->has("--verbose"));
     TEST_CHECK(parsed->value("--verbose") == "1");
@@ -53,7 +53,7 @@ namespace {
 
   void checkLastFlagWins() {
     Args args{"--output", "first", "-o", "second", "input.png"};
-    auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
     TEST_CHECK(parsed.has_value());
     TEST_CHECK(parsed->value("--output") == "second");
     TEST_CHECK(parsed->values("--output").size() == 1);
@@ -63,31 +63,31 @@ namespace {
   void checkErrors() {
     {
       Args args{"--mode", "sideways", "input.png"};
-      auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+      auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
       TEST_CHECK(!parsed.has_value());
       TEST_CHECK(parsed.error() == "error: invalid value 'sideways' for <mode> (expected dark, light)");
     }
     {
       Args args{"--output"};
-      auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+      auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
       TEST_CHECK(!parsed.has_value());
       TEST_CHECK(parsed.error() == "error: --output requires a value");
     }
     {
       Args args{"--bogus"};
-      auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+      auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
       TEST_CHECK(!parsed.has_value());
       TEST_CHECK(parsed.error() == "error: unknown argument: --bogus");
     }
     {
       Args args{};
-      auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+      auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
       TEST_CHECK(!parsed.has_value());
       TEST_CHECK(parsed.error() == "error: missing required argument <input>");
     }
     {
       Args args{"input", "extra"};
-      auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+      auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
       TEST_CHECK(!parsed.has_value());
       TEST_CHECK(parsed.error() == "error: unexpected argument: extra");
     }
@@ -95,34 +95,34 @@ namespace {
 
   void checkRequiredFlag() {
     static constexpr std::array flags{
-        noctalia::cli::Flag{"--target", {}, "<dir>", "Target", {}, {}, false, true},
+        chiroptera::cli::Flag{"--target", {}, "<dir>", "Target", {}, {}, false, true},
     };
-    static constexpr noctalia::cli::Command command{"required", {}, {}, {}, flags, {}, {}, false};
+    static constexpr chiroptera::cli::Command command{"required", {}, {}, {}, flags, {}, {}, false};
     Args args{};
-    auto parsed = noctalia::cli::parseArgs(command, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(command, args.pointers);
     TEST_CHECK(!parsed.has_value());
     TEST_CHECK(parsed.error() == "error: missing required flag --target");
   }
 
   void checkVariadic() {
     static constexpr std::array positionals{
-        noctalia::cli::Positional{"path", {}, {}, false, true, false},
+        chiroptera::cli::Positional{"path", {}, {}, false, true, false},
     };
-    static constexpr noctalia::cli::Command command{"lint", {}, {}, {}, {}, positionals, {}, false};
+    static constexpr chiroptera::cli::Command command{"lint", {}, {}, {}, {}, positionals, {}, false};
     Args args{"one", "two", "three"};
-    auto parsed = noctalia::cli::parseArgs(command, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(command, args.pointers);
     TEST_CHECK(parsed.has_value());
     TEST_CHECK((parsed->positionals == std::vector<std::string_view>{"one", "two", "three"}));
   }
 
   void checkJoinedRemaining() {
     static constexpr std::array positionals{
-        noctalia::cli::Positional{"summary", {}, {}, true, false, false},
-        noctalia::cli::Positional{"body", {}, {}, true, false, true},
+        chiroptera::cli::Positional{"summary", {}, {}, true, false, false},
+        chiroptera::cli::Positional{"body", {}, {}, true, false, true},
     };
-    static constexpr noctalia::cli::Command command{"notification-show", {}, {}, {}, {}, positionals, {}, false};
+    static constexpr chiroptera::cli::Command command{"notification-show", {}, {}, {}, {}, positionals, {}, false};
     Args args{"Hello", "World", "!"};
-    auto parsed = noctalia::cli::parseArgs(command, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(command, args.pointers);
     TEST_CHECK(parsed.has_value());
     TEST_CHECK(parsed->positionals.size() == 1);
     TEST_CHECK(parsed->positionals[0] == "Hello");
@@ -131,7 +131,7 @@ namespace {
 
   void checkHelpAnywhere() {
     Args args{"input.png", "--help", "--bogus"};
-    auto parsed = noctalia::cli::parseArgs(kCommand, args.pointers);
+    auto parsed = chiroptera::cli::parseArgs(kCommand, args.pointers);
     TEST_CHECK(parsed.has_value());
     TEST_CHECK(parsed->helpRequested);
   }
@@ -139,7 +139,7 @@ namespace {
 } // namespace
 
 int main() {
-  static_assert(noctalia::cli::validateCommand(kCommand));
+  static_assert(chiroptera::cli::validateCommand(kCommand));
   checkFlags();
   checkLastFlagWins();
   checkErrors();

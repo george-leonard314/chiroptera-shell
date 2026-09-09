@@ -195,7 +195,7 @@ private:
   void startTrayService();
   void syncNotificationDaemon();
   void installNotificationBusNameWatch();
-  // gnome-keyring / kwalletd usually claim org.freedesktop.secrets a moment after Noctalia starts,
+  // gnome-keyring / kwalletd usually claim org.freedesktop.secrets a moment after Chiroptera starts,
   // so the first credential lookups report "no provider". Watch the bus name and re-drive the
   // consumers that gave up once an owner appears.
   void installSecretServiceNameWatch();
@@ -233,10 +233,10 @@ private:
   ConfigService m_configService;
   HttpClient m_httpClient;
   FileWatcher m_fileWatcher;
-  noctalia::theme::CommunityPaletteService m_communityPaletteService{m_httpClient};
-  noctalia::theme::CommunityTemplateService m_communityTemplateService{m_httpClient};
-  noctalia::theme::ThemeService m_themeService{m_configService, m_httpClient};
-  noctalia::theme::TemplateApplyService m_templateApplyService{m_configService};
+  chiroptera::theme::CommunityPaletteService m_communityPaletteService{m_httpClient};
+  chiroptera::theme::CommunityTemplateService m_communityTemplateService{m_httpClient};
+  chiroptera::theme::ThemeService m_themeService{m_configService, m_httpClient};
+  chiroptera::theme::TemplateApplyService m_templateApplyService{m_configService};
   scripting::ScriptApiContext m_scriptApi;
   std::function<void()> m_syncScriptApiOutputs;
   scripting::PluginManager m_pluginManager{m_configService};
@@ -250,7 +250,7 @@ private:
   std::unique_ptr<LogindService> m_logindService;
   // Set on PrepareForSleep(true); cleared when the session lock engages (or the lock aborts).
   bool m_releaseSleepDelayWhenLocked = false;
-  // Set before Noctalia-initiated suspend so PrepareForSleep skips lock-before-sleep.
+  // Set before Chiroptera-initiated suspend so PrepareForSleep skips lock-before-sleep.
   bool m_skipLockOnNextSleep = false;
   std::unique_ptr<AccountsService> m_accountsService;
   std::unique_ptr<ScreenSaverService> m_screenSaverService;

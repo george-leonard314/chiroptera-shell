@@ -43,20 +43,20 @@ int main() {
   });
 
   constexpr auto source = R"(
-assert(not noctalia.runAsync(""))
-assert(noctalia.runAsync(
+assert(not chiroptera.runAsync(""))
+assert(chiroptera.runAsync(
   { "printf", "%s", "owner/repo; printf injected" },
   function(_) end,
   5000
 ))
-assert(noctalia.getSetting("shell.offline_mode"))
-assert(noctalia.wallpaperPath("DP-1") == "/tmp/wallpaper.png")
-assert(noctalia.wallpaperPath("missing") == nil)
-noctalia.setWallpaperMask("DP-1", {
+assert(chiroptera.getSetting("shell.offline_mode"))
+assert(chiroptera.wallpaperPath("DP-1") == "/tmp/wallpaper.png")
+assert(chiroptera.wallpaperPath("missing") == nil)
+chiroptera.setWallpaperMask("DP-1", {
   path = "/tmp/mask.png",
   wallpaperPath = "/tmp/wallpaper.png",
 })
-noctalia.setWallpaperMask("DP-1", nil)
+chiroptera.setWallpaperMask("DP-1", nil)
 )";
   if (!expect(host.exec("=direct-argv", source), "argv call should be accepted")) {
     return 1;

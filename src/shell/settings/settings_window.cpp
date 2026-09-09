@@ -96,7 +96,7 @@ namespace {
   }
 
   void focusExistingSettingsWindow(WaylandConnection& wayland, wl_surface* surface) {
-    static constexpr std::string_view kSettingsAppId = "dev.noctalia.Noctalia";
+    static constexpr std::string_view kSettingsAppId = "dev.chiroptera.Chiroptera";
     wayland.activateSurface(surface);
     wayland.activateToplevelForAppId(kSettingsAppId);
   }
@@ -138,7 +138,7 @@ namespace {
   class SettingsProfileWatch {
   public:
     SettingsProfileWatch() {
-      if (noctalia::profiling::enabled()) {
+      if (chiroptera::profiling::enabled()) {
         m_watch.emplace();
       }
     }
@@ -153,7 +153,7 @@ namespace {
     [[nodiscard]] double elapsedMs() const { return m_watch.has_value() ? m_watch->elapsedMs() : 0.0; }
 
   private:
-    std::optional<noctalia::profiling::StopWatch> m_watch;
+    std::optional<chiroptera::profiling::StopWatch> m_watch;
   };
 
   void logSettingsProfile(std::string_view label, const SettingsProfileWatch& watch) {
@@ -473,7 +473,7 @@ void SettingsWindow::open(std::string context) {
       .minWidth = minWidth,
       .minHeight = minHeight,
       .title = i18n::tr("settings.window.native-title"),
-      .appId = "dev.noctalia.Noctalia",
+      .appId = "dev.chiroptera.Chiroptera",
   };
 
   if (!m_surface->initialize(output, cfg)) {

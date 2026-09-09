@@ -13,7 +13,7 @@
 
 namespace security {
 
-  inline constexpr std::string_view SecretStoreSchemaName = "dev.noctalia.Secret";
+  inline constexpr std::string_view SecretStoreSchemaName = "dev.chiroptera.Secret";
 
   struct SecretId {
     std::string scope;

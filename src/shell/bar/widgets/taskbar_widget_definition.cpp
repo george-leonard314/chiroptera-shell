@@ -33,11 +33,11 @@ namespace {
 
 } // namespace
 
-const noctalia::bar::WidgetDefinition<TaskbarWidgetOptions>& taskbarWidgetDefinition() {
-  using noctalia::bar::field;
+const chiroptera::bar::WidgetDefinition<TaskbarWidgetOptions>& taskbarWidgetDefinition() {
+  using chiroptera::bar::field;
   using Options = TaskbarWidgetOptions;
 
-  static const noctalia::bar::WidgetDefinition<Options>
+  static const chiroptera::bar::WidgetDefinition<Options>
       definition{
           .type = "taskbar",
           .fields =

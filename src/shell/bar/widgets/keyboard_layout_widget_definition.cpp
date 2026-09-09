@@ -8,11 +8,11 @@ namespace {
 
 } // namespace
 
-const noctalia::bar::WidgetDefinition<KeyboardLayoutWidget::Options>& keyboardLayoutWidgetDefinition() {
-  using noctalia::bar::field;
+const chiroptera::bar::WidgetDefinition<KeyboardLayoutWidget::Options>& keyboardLayoutWidgetDefinition() {
+  using chiroptera::bar::field;
   using Options = KeyboardLayoutWidget::Options;
 
-  static const noctalia::bar::WidgetDefinition<Options> definition{
+  static const chiroptera::bar::WidgetDefinition<Options> definition{
       .type = "keyboard_layout",
       .fields =
           {

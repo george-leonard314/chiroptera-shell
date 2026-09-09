@@ -1,26 +1,26 @@
 ---
 title: Hooks
-description: Advanced event hooks for running shell commands and Noctalia IPC commands.
+description: Advanced event hooks for running shell commands and Chiroptera IPC commands.
 sidebar:
   order: 0
 ---
 
-Hooks are advanced automation entries under `[hooks]` in the Noctalia config stack. For hand-written hooks, put them in
-any `*.toml` file under `~/.config/noctalia/`. They run extra commands when specific Noctalia events happen.
+Hooks are advanced automation entries under `[hooks]` in the Chiroptera config stack. For hand-written hooks, put them in
+any `*.toml` file under `~/.config/chiroptera/`. They run extra commands when specific Chiroptera events happen.
 
-Each event is a shell command string or an array of shell command strings that run in order. Use `noctalia msg ...` when
-a hook needs to call Noctalia IPC.
+Each event is a shell command string or an array of shell command strings that run in order. Use `chiroptera msg ...` when
+a hook needs to call Chiroptera IPC.
 
-Hooks do not replace Noctalia's built-in behavior. For example, external or IPC-initiated Wi-Fi, Bluetooth, and power
+Hooks do not replace Chiroptera's built-in behavior. For example, external or IPC-initiated Wi-Fi, Bluetooth, and power
 profile changes show an OSD. `notify-send` can be useful while testing that a hook fires, but it is not required for
-Noctalia's own feedback.
+Chiroptera's own feedback.
 
 | Key | When it fires |
 |-----|---------------|
-| `started` | Once after Noctalia finishes startup (IPC ready). |
-| `wallpaper_changed` | After a persisted wallpaper path change is applied. Sets `NOCTALIA_WALLPAPER_PATH` and `NOCTALIA_WALLPAPER_CONNECTOR` (for example `DP-1`; empty when the change is not tied to a live connector). |
+| `started` | Once after Chiroptera finishes startup (IPC ready). |
+| `wallpaper_changed` | After a persisted wallpaper path change is applied. Sets `CHIROPTERA_WALLPAPER_PATH` and `CHIROPTERA_WALLPAPER_CONNECTOR` (for example `DP-1`; empty when the change is not tied to a live connector). |
 | `colors_changed` | After the theme palette is resolved and terminal templates are updated. |
-| `theme_mode_changed` | After theme templates are applied, when the resolved [`[theme].mode`](/noctalia/theming/#mode) changes between `light` and `dark`. This is the app-facing mode, so it ignores [`shell_mode`](/noctalia/theming/#shell_mode). Sets `NOCTALIA_THEME_MODE`, `NOCTALIA_THEME_MODE_PREVIOUS`, and `NOCTALIA_THEME_MODE_CONFIGURED` (`dark`, `light`, or `auto`). |
+| `theme_mode_changed` | After theme templates are applied, when the resolved [`[theme].mode`](/chiroptera/theming/#mode) changes between `light` and `dark`. This is the app-facing mode, so it ignores [`shell_mode`](/chiroptera/theming/#shell_mode). Sets `CHIROPTERA_THEME_MODE`, `CHIROPTERA_THEME_MODE_PREVIOUS`, and `CHIROPTERA_THEME_MODE_CONFIGURED` (`dark`, `light`, or `auto`). |
 | `session_locked` | When the compositor confirms the session lock. |
 | `session_unlocked` | When the session leaves the locked state. |
 | `logging_out` | Immediately before the session panel runs the logout sequence. |
@@ -31,8 +31,8 @@ Noctalia's own feedback.
 | `battery_charging` | When the battery enters charging after the previous tracked battery hook state was not charging. Intermediate UPower states do not retrigger it. |
 | `battery_discharging` | When the battery enters discharging after the previous tracked battery hook state was not discharging. Intermediate UPower states do not retrigger it. |
 | `battery_plugged` | When the battery enters fully charged or pending charge after the previous tracked battery hook state was not plugged. Intermediate UPower states do not retrigger it. |
-| `battery_percentage_changed` | When the normalized whole battery percentage changes. Sets `NOCTALIA_BATTERY_STATE` (`charging`, `discharging`, `empty`, `fully_charged`, `pending_charge`, `pending_discharge`, or `unknown`) and `NOCTALIA_BATTERY_PERCENT`. |
-| `power_profile_changed` | When the active UPower power profile changes (for example `performance`, `balanced`, or `power-saver`). Sets `NOCTALIA_POWER_PROFILE`, `NOCTALIA_POWER_PROFILE_PREVIOUS`, and `NOCTALIA_POWER_PROFILE_ORIGIN` (`noctalia` or `external`). |
+| `battery_percentage_changed` | When the normalized whole battery percentage changes. Sets `CHIROPTERA_BATTERY_STATE` (`charging`, `discharging`, `empty`, `fully_charged`, `pending_charge`, `pending_discharge`, or `unknown`) and `CHIROPTERA_BATTERY_PERCENT`. |
+| `power_profile_changed` | When the active UPower power profile changes (for example `performance`, `balanced`, or `power-saver`). Sets `CHIROPTERA_POWER_PROFILE`, `CHIROPTERA_POWER_PROFILE_PREVIOUS`, and `CHIROPTERA_POWER_PROFILE_ORIGIN` (`chiroptera` or `external`). |
 
 ## Battery hooks
 
@@ -40,7 +40,7 @@ Battery hook values are exposed as environment variables, not positional argumen
 
 ```toml
 [hooks]
-battery_percentage_changed = "notify-send 'Battery' \"$NOCTALIA_BATTERY_PERCENT% ($NOCTALIA_BATTERY_STATE)\""
+battery_percentage_changed = "notify-send 'Battery' \"$CHIROPTERA_BATTERY_PERCENT% ($CHIROPTERA_BATTERY_STATE)\""
 ```
 
 To run an action only when the battery is discharging and has just crossed below a threshold, store the previous
@@ -48,23 +48,23 @@ percentage in a small script:
 
 ```toml
 [hooks]
-battery_percentage_changed = "NOCTALIA_BATTERY_THRESHOLD=20 ~/.config/noctalia/hooks/battery-threshold.sh"
+battery_percentage_changed = "CHIROPTERA_BATTERY_THRESHOLD=20 ~/.config/chiroptera/hooks/battery-threshold.sh"
 ```
 
-```bash title="~/.config/noctalia/hooks/battery-threshold.sh"
+```bash title="~/.config/chiroptera/hooks/battery-threshold.sh"
 #!/usr/bin/env bash
 set -euo pipefail
 
 # Use the threshold from the hook command, or fall back to 20%.
-threshold="${NOCTALIA_BATTERY_THRESHOLD:-20}"
+threshold="${CHIROPTERA_BATTERY_THRESHOLD:-20}"
 
 # Keep a tiny state file so the script can compare this event with the last one.
-state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/noctalia"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/chiroptera"
 state_file="$state_dir/battery-percent"
 
-# Noctalia provides these values whenever battery_percentage_changed fires.
-percent="${NOCTALIA_BATTERY_PERCENT:-}"
-battery_state="${NOCTALIA_BATTERY_STATE:-unknown}"
+# Chiroptera provides these values whenever battery_percentage_changed fires.
+percent="${CHIROPTERA_BATTERY_PERCENT:-}"
+battery_state="${CHIROPTERA_BATTERY_STATE:-unknown}"
 
 # Ignore the event if the percentage is missing or not a whole number.
 [[ "$percent" =~ ^[0-9]+$ ]] || exit 0
@@ -90,58 +90,58 @@ fi
 
 ## Wallpaper hooks
 
-Wallpaper hook values are exposed as environment variables, not positional arguments. `NOCTALIA_WALLPAPER_PATH` is the
-applied path, and `NOCTALIA_WALLPAPER_CONNECTOR` is the output connector for that wallpaper change.
+Wallpaper hook values are exposed as environment variables, not positional arguments. `CHIROPTERA_WALLPAPER_PATH` is the
+applied path, and `CHIROPTERA_WALLPAPER_CONNECTOR` is the output connector for that wallpaper change.
 When multiple outputs change, the hook runs once per changed connector.
 
 ```toml
 [hooks]
-wallpaper_changed = "logger -t noctalia-hooks \"Wallpaper on $NOCTALIA_WALLPAPER_CONNECTOR: $NOCTALIA_WALLPAPER_PATH\""
+wallpaper_changed = "logger -t chiroptera-hooks \"Wallpaper on $CHIROPTERA_WALLPAPER_CONNECTOR: $CHIROPTERA_WALLPAPER_PATH\""
 ```
 
 ## Examples
 
 ```toml
 [hooks]
-# Start a user unit after Noctalia IPC is ready.
-started = "systemctl --user start noctalia-ready.target"
+# Start a user unit after Chiroptera IPC is ready.
+started = "systemctl --user start chiroptera-ready.target"
 
 # Log wallpaper changes with the connector-specific payload.
-wallpaper_changed = "logger -t noctalia-hooks \"wallpaper: $NOCTALIA_WALLPAPER_CONNECTOR $NOCTALIA_WALLPAPER_PATH\""
+wallpaper_changed = "logger -t chiroptera-hooks \"wallpaper: $CHIROPTERA_WALLPAPER_CONNECTOR $CHIROPTERA_WALLPAPER_PATH\""
 colors_changed = [
   "systemctl --user reload foot-server.service",
-  "logger -t noctalia-hooks 'palette colors changed'",
+  "logger -t chiroptera-hooks 'palette colors changed'",
 ]
-theme_mode_changed = "logger -t noctalia-hooks \"mode: $NOCTALIA_THEME_MODE\""
+theme_mode_changed = "logger -t chiroptera-hooks \"mode: $CHIROPTERA_THEME_MODE\""
 
-# Combine normal shell commands with Noctalia IPC commands.
+# Combine normal shell commands with Chiroptera IPC commands.
 session_locked = [
   "playerctl pause",
-  "noctalia msg bar-hide",
+  "chiroptera msg bar-hide",
 ]
 session_unlocked = [
-  "noctalia msg bar-show",
-  "noctalia msg dpms-on && notify-send 'Session resumed'",
+  "chiroptera msg bar-show",
+  "chiroptera msg dpms-on && notify-send 'Session resumed'",
 ]
 
-logging_out   = "logger -t noctalia-hooks 'logout requested'"
+logging_out   = "logger -t chiroptera-hooks 'logout requested'"
 rebooting     = "systemctl --user stop backup-sync.service"
 shutting_down = "systemctl --user stop backup-sync.service"
 
 # External or IPC-initiated Wi-Fi, Bluetooth, and power profile changes use OSD.
 # Use hooks only for extra side effects.
-wifi_enabled  = "logger -t noctalia-hooks 'Wi-Fi radio enabled'"
-wifi_disabled = "logger -t noctalia-hooks 'Wi-Fi radio disabled'"
+wifi_enabled  = "logger -t chiroptera-hooks 'Wi-Fi radio enabled'"
+wifi_disabled = "logger -t chiroptera-hooks 'Wi-Fi radio disabled'"
 
-bluetooth_enabled  = "logger -t noctalia-hooks 'Bluetooth powered on'"
-bluetooth_disabled = "logger -t noctalia-hooks 'Bluetooth powered off'"
+bluetooth_enabled  = "logger -t chiroptera-hooks 'Bluetooth powered on'"
+bluetooth_disabled = "logger -t chiroptera-hooks 'Bluetooth powered off'"
 
-battery_charging           = "logger -t noctalia-hooks 'Battery charging'"
-battery_discharging        = "logger -t noctalia-hooks 'Battery discharging'"
-battery_plugged            = "logger -t noctalia-hooks 'Battery plugged'"
-battery_percentage_changed = "logger -t noctalia-hooks \"Battery: $NOCTALIA_BATTERY_STATE $NOCTALIA_BATTERY_PERCENT%\""
-power_profile_changed   = "logger -t noctalia-hooks \"Power profile: $NOCTALIA_POWER_PROFILE_PREVIOUS -> $NOCTALIA_POWER_PROFILE ($NOCTALIA_POWER_PROFILE_ORIGIN)\""
+battery_charging           = "logger -t chiroptera-hooks 'Battery charging'"
+battery_discharging        = "logger -t chiroptera-hooks 'Battery discharging'"
+battery_plugged            = "logger -t chiroptera-hooks 'Battery plugged'"
+battery_percentage_changed = "logger -t chiroptera-hooks \"Battery: $CHIROPTERA_BATTERY_STATE $CHIROPTERA_BATTERY_PERCENT%\""
+power_profile_changed   = "logger -t chiroptera-hooks \"Power profile: $CHIROPTERA_POWER_PROFILE_PREVIOUS -> $CHIROPTERA_POWER_PROFILE ($CHIROPTERA_POWER_PROFILE_ORIGIN)\""
 
-# Quick test while developing a hook; not needed for Noctalia's own notifications.
-# started = "notify-send 'Noctalia hook' 'started fired'"
+# Quick test while developing a hook; not needed for Chiroptera's own notifications.
+# started = "notify-send 'Chiroptera hook' 'started fired'"
 ```

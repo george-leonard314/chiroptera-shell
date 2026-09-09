@@ -1,6 +1,6 @@
 ---
 title: NixOS
-description: Start here to set up and use Noctalia.
+description: Start here to set up and use Chiroptera.
 sidebar:
   order: 2
 ---
@@ -9,7 +9,7 @@ import SettingsReference from '../../../../components/SettingsReference.astro';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 :::caution
-To make Noctalia's wifi, bluetooth, power-profile, and battery feature available, please ensure the following NixOS options are enabled:
+To make Chiroptera's wifi, bluetooth, power-profile, and battery feature available, please ensure the following NixOS options are enabled:
 - `networking.networkmanager.enable`
 - `hardware.bluetooth.enable`
 - `services.power-profiles-daemon.enable` or `services.tuned.enable`
@@ -17,7 +17,7 @@ To make Noctalia's wifi, bluetooth, power-profile, and battery feature available
 :::
 
 ## Installation
-A Noctalia package is available on [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&show=noctalia). 
+A Chiroptera package is available on [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&show=chiroptera). 
 
 If you'd prefer the latest git version or would like to use one of the modules, you can [add the input](#add-input) using your preferred input-pinning method and optionally use the [binary cache](#binary-cache) to avoid compiling locally.
 
@@ -25,14 +25,14 @@ If you'd prefer the latest git version or would like to use one of the modules, 
 
 <Tabs>
   <TabItem label="flakes">
-    Add Noctalia to your flake inputs:
+    Add Chiroptera to your flake inputs:
 
     ```nix
     # flake.nix
     {
       inputs = {
-        noctalia = {
-          url = "github:noctalia-dev/noctalia";
+        chiroptera = {
+          url = "github:noctalia-dev/chiroptera";
           inputs.nixpkgs.follows = "nixpkgs"; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
         };
       };
@@ -44,28 +44,28 @@ If you'd prefer the latest git version or would like to use one of the modules, 
     :::
   </TabItem>
   <TabItem label="tack">
-    Add Noctalia to your tack inputs:
+    Add Chiroptera to your tack inputs:
     ```
-    tack add noctalia github:noctalia-dev/noctalia
+    tack add chiroptera github:noctalia-dev/chiroptera
     ```
 
-    If you want to use the cache, make sure to disable any sort of following for Noctalia's nixpkgs input.
+    If you want to use the cache, make sure to disable any sort of following for Chiroptera's nixpkgs input.
 
     :::note
     For flakes/tack instructions, we assume you are passing in `inputs` through `specialArgs` or equivalent. 
     :::
   </TabItem>
   <TabItem label="npins">
-    Add Noctalia to your npins sources:
+    Add Chiroptera to your npins sources:
     ```
-    npins add github noctalia-dev noctalia --branch main
+    npins add github noctalia-dev chiroptera --branch main
     ```
 
     ```nix
     # configuration.nix
     { pkgs, ... }:
     let
-      noctalia = import (import ./npins).noctalia {
+      chiroptera = import (import ./npins).chiroptera {
         inherit pkgs; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
       };
     in
@@ -73,21 +73,21 @@ If you'd prefer the latest git version or would like to use one of the modules, 
     ```
   </TabItem>
   <TabItem label="tarball">
-    Add Noctalia directly using `builtins.fetchTarball`.
+    Add Chiroptera directly using `builtins.fetchTarball`.
     With pinning:
     ```nix
     # configuration.nix
     { pkgs, ... }:
     let
-      noctalia-src = let
+      chiroptera-src = let
         commit = ""; # replace this with an actual commit id or tag
       in
         fetchTarball {
-          url = "https://github.com/noctalia-dev/noctalia/archive/${commit}.tar.gz";
+          url = "https://github.com/george-leonard314/chiroptera-shell/archive/${commit}.tar.gz";
           sha256 = ""; # replace this with hash from nix build output, or by using `nix-prefetch-url --unpack`
         };
       
-      noctalia = import noctalia-src {
+      chiroptera = import chiroptera-src {
         inherit pkgs; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
       };
     in
@@ -99,9 +99,9 @@ If you'd prefer the latest git version or would like to use one of the modules, 
     # configuration.nix
     { pkgs, ... }:
     let
-      noctalia-src = fetchTarball "https://github.com/noctalia-dev/noctalia/archive/main.tar.gz";
+      chiroptera-src = fetchTarball "https://github.com/george-leonard314/chiroptera-shell/archive/main.tar.gz";
 
-      noctalia = import noctalia-src {
+      chiroptera = import chiroptera-src {
         inherit pkgs; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
       };
     in
@@ -122,7 +122,7 @@ Note that both the Home Manager and Hjem modules install the package for you, so
     { inputs, pkgs, ... }:
     {
       environment.systemPackages = [
-        inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+        inputs.chiroptera.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
     }
     ```
@@ -134,7 +134,7 @@ Note that both the Home Manager and Hjem modules install the package for you, so
       # see adding the input above
     in {
       environment.systemPackages = [
-        noctalia.package
+        chiroptera.package
       ];
     }
     ```
@@ -143,7 +143,7 @@ Note that both the Home Manager and Hjem modules install the package for you, so
 
 ### Home Manager Module {#home-manager}
 
-The Home Manager module allows you to configure Noctalia's settings [(that you would otherwise put in `~/.config/noctalia/`)](/noctalia/configuration/) using nix instead of toml, or allows you to link an existing toml file. It is optional.
+The Home Manager module allows you to configure Chiroptera's settings [(that you would otherwise put in `~/.config/chiroptera/`)](/chiroptera/configuration/) using nix instead of toml, or allows you to link an existing toml file. It is optional.
 
 <Tabs>
   <TabItem label="flakes/tack">
@@ -152,10 +152,10 @@ The Home Manager module allows you to configure Noctalia's settings [(that you w
     {
       home-manager.users.drfoobar = {
         imports = [
-          inputs.noctalia.homeModules.default
+          inputs.chiroptera.homeModules.default
         ];
 
-        programs.noctalia = {
+        programs.chiroptera = {
           enable = true;
 
           settings = { # This may also be a string or path to a .toml file.
@@ -182,10 +182,10 @@ The Home Manager module allows you to configure Noctalia's settings [(that you w
     in {
       home-manager.users.drfoobar = {
         imports = [
-          noctalia.homeModule
+          chiroptera.homeModule
         ];
 
-        programs.noctalia = {
+        programs.chiroptera = {
           enable = true;
 
           settings = { # This may also be a string or path to a .toml file.
@@ -218,11 +218,11 @@ For those using Hjem instead of Home Manager, a Hjem module is also available.
     {
       hjem = {
         extraModules = [
-          inputs.noctalia.hjemModules.default
+          inputs.chiroptera.hjemModules.default
         ];
 
         users.drfoobar = {
-          programs.noctalia = {
+          programs.chiroptera = {
             enable = true;
             
             settings = { ... };
@@ -239,11 +239,11 @@ For those using Hjem instead of Home Manager, a Hjem module is also available.
     in {
       hjem = {
         extraModules = [
-          noctalia.hjemModule
+          chiroptera.hjemModule
         ];
 
         users.drfoobar = {
-          programs.noctalia = {
+          programs.chiroptera = {
             enable = true;
             
             settings = { ... };
@@ -266,10 +266,10 @@ The NixOS module installs the package system-wide and can enable some recommende
     { inputs, ... }:
     {
       imports = [
-        inputs.noctalia.nixosModules.default
+        inputs.chiroptera.nixosModules.default
       ];
     
-      programs.noctalia = {
+      programs.chiroptera = {
         enable = true;
     
         # Enables NetworkManager, Bluetooth, UPower, and a power profile service.
@@ -284,10 +284,10 @@ The NixOS module installs the package system-wide and can enable some recommende
       # see adding the input above
     in {
       imports = [
-        noctalia.nixosModule
+        chiroptera.nixosModule
       ];
       
-      programs.noctalia = {
+      programs.chiroptera = {
         enable = true;
       
         # Enables NetworkManager, Bluetooth, UPower, and a power profile service.
@@ -300,20 +300,20 @@ The NixOS module installs the package system-wide and can enable some recommende
 
 ### Systemd Service {#systemd}
 
-Each of the above modules includes a systemd user service for Noctalia, which can be enabled by setting `programs.noctalia.systemd.enable = true`.
+Each of the above modules includes a systemd user service for Chiroptera, which can be enabled by setting `programs.chiroptera.systemd.enable = true`.
 
 :::note
-When using the service, it is recommended to enable `launch_apps_as_systemd_services`, otherwise any apps launched by Noctalia will be terminated when the service restarts.
+When using the service, it is recommended to enable `launch_apps_as_systemd_services`, otherwise any apps launched by Chiroptera will be terminated when the service restarts.
 :::
 
 ### Binary Cache {#binary-cache}
 
-Pre-built binaries are available on [Cachix](https://app.cachix.org/cache/noctalia), so you can skip compiling locally.
+Pre-built binaries are available on [Cachix](https://app.cachix.org/cache/chiroptera), so you can skip compiling locally.
 
 You can configure the substituter either in your NixOS config, flake, or `/etc/nix/nix.conf`:
 
 :::caution
-To use the binary cache, you have to omit `inputs.nixpkgs.follows` from the Noctalia input with flakes/tack or avoid `inherit pkgs;` with npins/tarball.
+To use the binary cache, you have to omit `inputs.nixpkgs.follows` from the Chiroptera input with flakes/tack or avoid `inherit pkgs;` with npins/tarball.
 :::
 
 You can add the cache either to your flake, nixos configuration, or `/etc/nix/nix.conf`.
@@ -322,47 +322,47 @@ You can add the cache either to your flake, nixos configuration, or `/etc/nix/ni
   <TabItem label="configuration.nix">
     ```nix
     nix.settings = {
-      extra-substituters = [ "https://noctalia.cachix.org" ];
-      extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+      extra-substituters = [ "https://chiroptera.cachix.org" ];
+      extra-trusted-public-keys = [ "chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
     };
     ```
   </TabItem>
   <TabItem label="flake.nix">
     ```nix
     nixConfig = {
-      extra-substituters = [ "https://noctalia.cachix.org" ];
-      extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+      extra-substituters = [ "https://chiroptera.cachix.org" ];
+      extra-trusted-public-keys = [ "chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
     };
     ```
   </TabItem>
   <TabItem label="nix.conf">
     ```properties
-    extra-substituters = https://noctalia.cachix.org
-    extra-trusted-public-keys = noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=
+    extra-substituters = https://chiroptera.cachix.org
+    extra-trusted-public-keys = chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=
     ```
   </TabItem>
 </Tabs>
 
-Overriding any of Noctalia's inputs (e.g. via `inputs.nixpkgs.follows` with flakes) changes the derivation hash, causing cache misses.
+Overriding any of Chiroptera's inputs (e.g. via `inputs.nixpkgs.follows` with flakes) changes the derivation hash, causing cache misses.
 
 Additionally, tracking `main` directly may pull in a commit that hasn't been cached yet by CI.
 
-To avoid this, the [`cachix`](https://github.com/noctalia-dev/noctalia/tree/cachix) branch always points to the latest cached commit. Pinning to this branch guarantees you always track the latest commit that has already been cached:
+To avoid this, the [`cachix`](https://github.com/george-leonard314/chiroptera-shell/tree/cachix) branch always points to the latest cached commit. Pinning to this branch guarantees you always track the latest commit that has already been cached:
 
 <Tabs>
   <TabItem label="flakes">
     ```nix
-    noctalia.url = "github:noctalia-dev/noctalia/cachix";
+    chiroptera.url = "github:noctalia-dev/chiroptera/cachix";
     ```
   </TabItem>
   <TabItem label="tack">
     ```
-    tack add noctalia github:noctalia-dev/noctalia/cachix
+    tack add chiroptera github:noctalia-dev/chiroptera/cachix
     ```
   </TabItem>
   <TabItem label="npins">
     ```
-    npins add github noctalia-dev noctalia --branch cachix
+    npins add github noctalia-dev chiroptera --branch cachix
     ```
   </TabItem>
   <TabItem label="tarball">

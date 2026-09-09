@@ -1,7 +1,7 @@
-# Packaging Noctalia
+# Packaging Chiroptera
 
 Notes for distribution packagers. End-user install docs live in the
-[README](README.md) and at [docs.noctalia.dev](https://docs.noctalia.dev/noctalia/getting-started/installation/).
+[README](README.md) and at [docs.noctalia.dev](https://docs.noctalia.dev/chiroptera/getting-started/installation/).
 
 ## Package description
 
@@ -11,7 +11,7 @@ AppStream, etc.):
 > A sleek, customizable desktop shell crafted for Wayland.
 
 Do not substitute shorter or alternate blurbs (“lightweight Wayland bar”,
-“status bar”, ...). Noctalia is a full desktop shell (bars, dock, launcher,
+“status bar”, ...). Chiroptera is a full desktop shell (bars, dock, launcher,
 notifications, lock screen, wallpaper, settings, ...), not a bar-only tool.
 
 ## Packaged distributions
@@ -28,22 +28,22 @@ v5 is already packaged for:
 - GNU Guix
 - Debian (including Ubuntu)
 
-[Repology](https://repology.org/project/noctalia/versions) is a useful at-a-glance
+[Repology](https://repology.org/project/chiroptera/versions) is a useful at-a-glance
 check, but it only covers repositories it indexes (and may still list v4 as
-`noctalia-shell`). It is not a complete inventory of community packaging.
+`chiroptera-shell`). It is not a complete inventory of community packaging.
 
 ## Identity
 
 | | |
 |---|---|
-| Name | `noctalia` |
-| Homepage | https://github.com/noctalia-dev/noctalia |
+| Name | `chiroptera` |
+| Homepage | https://github.com/george-leonard314/chiroptera-shell |
 | Docs | https://docs.noctalia.dev |
 | License | MIT ([LICENSE](LICENSE)); also see vendored licenses under `third_party/` for SPDX completeness |
 | Version | Meson `project(... version: ...)` in [`meson.build`](meson.build) |
-| Binary | `noctalia` |
-| Desktop entry | `dev.noctalia.Noctalia.desktop` |
-| Icon | `noctalia` (`share/icons/hicolor/scalable/apps/noctalia.svg`) |
+| Binary | `chiroptera` |
+| Desktop entry | `dev.chiroptera.Chiroptera.desktop` |
+| Icon | `chiroptera` (`share/icons/hicolor/scalable/apps/chiroptera.svg`) |
 
 ## Maintenance Policy
 
@@ -97,22 +97,22 @@ support.
 - `jemalloc`: recommended on glibc; Meson feature option `-Djemalloc=auto|enabled|disabled`.
   Only used on glibc builds.
 
-Prefix/datadir are baked into the binary via `NOCTALIA_INSTALL_PREFIX` /
-`NOCTALIA_INSTALL_DATADIR`. Install with the same prefix you configured.
+Prefix/datadir are baked into the binary via `CHIROPTERA_INSTALL_PREFIX` /
+`CHIROPTERA_INSTALL_DATADIR`. Install with the same prefix you configured.
 
 ### Installed layout
 
 ```text
-<prefix>/bin/noctalia
-<prefix>/share/noctalia/assets/...
-<prefix>/share/applications/dev.noctalia.Noctalia.desktop
-<prefix>/share/icons/hicolor/scalable/apps/noctalia.svg
+<prefix>/bin/chiroptera
+<prefix>/share/chiroptera/assets/...
+<prefix>/share/applications/dev.chiroptera.Chiroptera.desktop
+<prefix>/share/icons/hicolor/scalable/apps/chiroptera.svg
 ```
 
 The shipped `assets/` tree is **required at runtime**. Shipping only the binary
 breaks fonts, translations, templates, glyphs, and sounds. See
 [CONTRIBUTING.md](CONTRIBUTING.md#runtime-assets) for lookup order (including
-`NOCTALIA_ASSETS_DIR` overrides for unusual layouts).
+`CHIROPTERA_ASSETS_DIR` overrides for unusual layouts).
 
 Not shipped (don’t look for them in the install): AppStream / metainfo XML, man
 pages, systemd units.
@@ -123,9 +123,9 @@ Static completion files are not shipped. Generate them from the freshly built
 binary and install them in the distribution's completion directories:
 
 ```text
-./build-<mode>/noctalia completions bash  → share/bash-completion/completions/noctalia
-./build-<mode>/noctalia completions zsh   → share/zsh/site-functions/_noctalia
-./build-<mode>/noctalia completions fish  → share/fish/vendor_completions.d/noctalia.fish
+./build-<mode>/chiroptera completions bash  → share/bash-completion/completions/chiroptera
+./build-<mode>/chiroptera completions zsh   → share/zsh/site-functions/_chiroptera
+./build-<mode>/chiroptera completions fish  → share/fish/vendor_completions.d/chiroptera.fish
 ```
 
 This is intentionally a packaging step rather than a Meson install rule:
@@ -170,8 +170,8 @@ Each carries its own license file beside the code.
 ## Startup and IPC
 
 No systemd user unit is shipped. Typical startup is compositor autostart or the
-desktop entry (`noctalia --daemon`). Control a running instance with
-`noctalia msg ...` (Unix socket under `XDG_RUNTIME_DIR`).
+desktop entry (`chiroptera --daemon`). Control a running instance with
+`chiroptera msg ...` (Unix socket under `XDG_RUNTIME_DIR`).
 
 Keep the `.desktop` daemon Exec unless you intentionally package a different
 session integration. Prefer the canonical description above for `Comment=` /
@@ -179,40 +179,40 @@ AppStream summary as well.
 
 ## Session conflicts
 
-On non-Plasma sessions Noctalia provides and registers:
+On non-Plasma sessions Chiroptera provides and registers:
 
 - `org.freedesktop.Notifications`
 - `org.kde.StatusNotifierWatcher` (system tray host)
 
 Do not run it alongside another notification daemon or StatusNotifier host
 (mako, dunst, swaync, waybar-as-host, ...) unless those are disabled. On Plasma,
-Noctalia integrates with Plasma's notification / tray paths instead of claiming
+Chiroptera integrates with Plasma's notification / tray paths instead of claiming
 the freedesktop Notifications name.
 
 ## User data paths
 
 | Kind | Default |
 |---|---|
-| Config | `$XDG_CONFIG_HOME/noctalia` (`~/.config/noctalia`), e.g. `config.toml` |
-| State | `$XDG_STATE_HOME/noctalia` (`~/.local/state/noctalia`), e.g. `settings.toml`, caches |
-| Data | `$XDG_DATA_HOME/noctalia` (`~/.local/share/noctalia`) |
-| Logs | `$XDG_CACHE_HOME/noctalia` (`~/.cache/noctalia`) |
+| Config | `$XDG_CONFIG_HOME/chiroptera` (`~/.config/chiroptera`), e.g. `config.toml` |
+| State | `$XDG_STATE_HOME/chiroptera` (`~/.local/state/chiroptera`), e.g. `settings.toml`, caches |
+| Data | `$XDG_DATA_HOME/chiroptera` (`~/.local/share/chiroptera`) |
+| Logs | `$XDG_CACHE_HOME/chiroptera` (`~/.cache/chiroptera`) |
 
-Override bases with `NOCTALIA_CONFIG_HOME`, `NOCTALIA_STATE_HOME`,
-`NOCTALIA_DATA_HOME` (each still appends `/noctalia`).
+Override bases with `CHIROPTERA_CONFIG_HOME`, `CHIROPTERA_STATE_HOME`,
+`CHIROPTERA_DATA_HOME` (each still appends `/chiroptera`).
 
-## What Noctalia is not
+## What Chiroptera is not
 
 - Not a compositor, display manager, or greeter. Greeter support is
   [noctalia-greeter](https://github.com/noctalia-dev/noctalia-greeter).
 - Not a replacement for file managers, screen casting, or drive mounting.
 - Compositor support varies (protocols / IPC). See the compositor docs for
-  [Niri](https://docs.noctalia.dev/noctalia/compositor-settings/niri/),
-  [Hyprland](https://docs.noctalia.dev/noctalia/compositor-settings/hyprland/),
-  [Sway / Scroll](https://docs.noctalia.dev/noctalia/compositor-settings/sway-scroll/),
-  [Mango](https://docs.noctalia.dev/noctalia/compositor-settings/mango/),
-  [Labwc](https://docs.noctalia.dev/noctalia/compositor-settings/labwc/), and
-  [KDE Plasma](https://docs.noctalia.dev/noctalia/compositor-settings/kde/).
+  [Niri](https://docs.noctalia.dev/chiroptera/compositor-settings/niri/),
+  [Hyprland](https://docs.noctalia.dev/chiroptera/compositor-settings/hyprland/),
+  [Sway / Scroll](https://docs.noctalia.dev/chiroptera/compositor-settings/sway-scroll/),
+  [Mango](https://docs.noctalia.dev/chiroptera/compositor-settings/mango/),
+  [Labwc](https://docs.noctalia.dev/chiroptera/compositor-settings/labwc/), and
+  [KDE Plasma](https://docs.noctalia.dev/chiroptera/compositor-settings/kde/).
 
 ## Versioning
 
@@ -221,5 +221,5 @@ you maintain a `-git` / nightly package on purpose.
 
 ## Contact
 
-- Issues: https://github.com/noctalia-dev/noctalia/issues
+- Issues: https://github.com/george-leonard314/chiroptera-shell/issues
 - Discord: https://discord.noctalia.dev

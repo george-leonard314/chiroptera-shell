@@ -1,7 +1,7 @@
 Contributing
 ===
 
-This file collects contributor-facing details for Noctalia: design goals, stack notes, code style, source layout,
+This file collects contributor-facing details for Chiroptera: design goals, stack notes, code style, source layout,
 runtime asset behavior, and debugging helpers.
 
 For dependencies and normal build commands, start with [BUILDING.md](BUILDING.md).
@@ -57,38 +57,38 @@ Direct project dependencies are listed below; transitive dependencies are owned 
 `meson install` installs the binary and shipped assets separately using the normal prefix layout:
 
 ```text
-/usr/local/bin/noctalia
-/usr/local/share/noctalia/assets/...
+/usr/local/bin/chiroptera
+/usr/local/share/chiroptera/assets/...
 ```
 
 With a different Meson `prefix`/`datadir`, the same structure is preserved under that prefix.
 
-Noctalia needs the `assets/` tree at runtime. Copying only the bare `noctalia` binary is not enough.
+Chiroptera needs the `assets/` tree at runtime. Copying only the bare `chiroptera` binary is not enough.
 
 Portable bundle layouts are also supported:
 
 ```text
 bundle/
-  noctalia
+  chiroptera
   assets/
 ```
 
 ```text
 bundle/
-  bin/noctalia
-  share/noctalia/assets/
+  bin/chiroptera
+  share/chiroptera/assets/
 ```
 
 Runtime asset lookup order:
 
-1. `NOCTALIA_ASSETS_DIR`
+1. `CHIROPTERA_ASSETS_DIR`
 2. `assets/` next to the executable
 3. `assets/` one level above the executable
-4. install-style `../share/noctalia/assets` relative to the executable
-5. the compiled install path from Meson (`<prefix>/<datadir>/noctalia/assets`)
+4. install-style `../share/chiroptera/assets` relative to the executable
+5. the compiled install path from Meson (`<prefix>/<datadir>/chiroptera/assets`)
 6. the source-tree `assets/` directory as a development fallback
 
-An asset root is only accepted if it contains the expected shipped files such as `emoji.json`, `fonts/noctalia-tabler.ttf`,
+An asset root is only accepted if it contains the expected shipped files such as `emoji.json`, `fonts/chiroptera-tabler.ttf`,
 `templates/builtin.toml`, and `translations/en.json`.
 
 ## Code Style
@@ -135,7 +135,7 @@ C++ identifiers.
 
 ## Translations
 
-Noctalia translations are managed through [Noctalia Translate](https://i18n.noctalia.dev/projects/noctalia). The JSON
+Chiroptera translations are managed through [Chiroptera Translate](https://i18n.noctalia.dev/projects/chiroptera). The JSON
 files in `assets/translations/` are exported from that workflow, with `assets/translations/en.json` acting as the
 source catalog for new strings.
 
@@ -234,7 +234,7 @@ src/
   wayland/          Wayland connection, seats, surfaces, clipboard, toplevels, text input
     hyprland/       Hyprland-specific Wayland protocol helpers
 assets/
-  fonts/            Bundled Noctalia Tabler and UI fonts
+  fonts/            Bundled Chiroptera Tabler and UI fonts
   sounds/           Notification and UI sounds
   templates/        Built-in theme templates
   translations/     Exported translation catalogs
@@ -252,20 +252,20 @@ third_party/
 
 ## Debugging
 
-All debug commands use the `dev.noctalia.Debug` D-Bus service, available at runtime.
+All debug commands use the `dev.chiroptera.Debug` D-Bus service, available at runtime.
 
 ```sh
 # Enable verbose debug logs
-gdbus call --session --dest dev.noctalia.Debug --object-path /dev/noctalia/Debug --method dev.noctalia.Debug.SetVerboseLogs true
+gdbus call --session --dest dev.chiroptera.Debug --object-path /dev/chiroptera/Debug --method dev.chiroptera.Debug.SetVerboseLogs true
 
 # Disable verbose debug logs
-gdbus call --session --dest dev.noctalia.Debug --object-path /dev/noctalia/Debug --method dev.noctalia.Debug.SetVerboseLogs false
+gdbus call --session --dest dev.chiroptera.Debug --object-path /dev/chiroptera/Debug --method dev.chiroptera.Debug.SetVerboseLogs false
 
 # Check current verbose log state
-gdbus call --session --dest dev.noctalia.Debug --object-path /dev/noctalia/Debug --method dev.noctalia.Debug.GetVerboseLogs
+gdbus call --session --dest dev.chiroptera.Debug --object-path /dev/chiroptera/Debug --method dev.chiroptera.Debug.GetVerboseLogs
 
 # Emit an internal notification (app_name, summary, body, timeout_ms, urgency 0-2)
-gdbus call --session --dest dev.noctalia.Debug --object-path /dev/noctalia/Debug --method dev.noctalia.Debug.EmitInternalNotification "Noctalia" "Test" "Hello from debug" 5000 1
+gdbus call --session --dest dev.chiroptera.Debug --object-path /dev/chiroptera/Debug --method dev.chiroptera.Debug.EmitInternalNotification "Chiroptera" "Test" "Hello from debug" 5000 1
 ```
 
 ### Crash output
@@ -276,17 +276,17 @@ When reporting a crash, include the complete terminal output from the process if
 ### ASan crash reports
 
 AddressSanitizer (ASan) can find memory errors that a normal build reports only as a crash. It requires a temporary
-source build; it does not replace the Noctalia package you already use.
+source build; it does not replace the Chiroptera package you already use.
 
 Install the source-build dependencies for your distribution using the commands in
 [BUILDING.md](BUILDING.md#dependencies), then clone the repository:
 
 ```sh
-git clone https://github.com/noctalia-dev/noctalia.git
-cd noctalia
+git clone https://github.com/george-leonard314/chiroptera-shell.git
+cd chiroptera
 ```
 
-Stop the Noctalia instance started by your compositor, then configure and build ASan:
+Stop the Chiroptera instance started by your compositor, then configure and build ASan:
 
 ```sh
 just configure asan && just build asan
@@ -295,9 +295,9 @@ just configure asan && just build asan
 Start the ASan binary in the foreground and save its output:
 
 ```sh
-ASAN_OPTIONS=log_path=/tmp/noctalia-asan ./build-asan/noctalia 2>&1 | tee noctalia-asan-terminal.log
+ASAN_OPTIONS=log_path=/tmp/chiroptera-asan ./build-asan/chiroptera 2>&1 | tee chiroptera-asan-terminal.log
 ```
 
-Reproduce the crash once. If Noctalia does not exit, press `Ctrl+C`. Attach both `noctalia-asan-terminal.log` and every
-`/tmp/noctalia-asan.*` file to the GitHub issue. The files in `/tmp` preserve the ASan report if the crash takes down
+Reproduce the crash once. If Chiroptera does not exit, press `Ctrl+C`. Attach both `chiroptera-asan-terminal.log` and every
+`/tmp/chiroptera-asan.*` file to the GitHub issue. The files in `/tmp` preserve the ASan report if the crash takes down
 the terminal. If the build or startup fails, attach that complete output instead.

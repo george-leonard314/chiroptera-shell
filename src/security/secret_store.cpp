@@ -415,7 +415,7 @@ namespace security {
 
   SecretStoreAttributes secretStoreAttributes(const SecretId& id) {
     return {
-        .application = "noctalia",
+        .application = "chiroptera",
         .scope = id.scope,
         .owner = id.owner,
         .name = id.name,

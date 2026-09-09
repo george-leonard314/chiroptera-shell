@@ -1666,8 +1666,8 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
     return "ok\n";
   };
 
-  ipc.bind(noctalia::cli::msg::brightnessSet, [this, applyToTargets](const std::string& args) -> std::string {
-    const auto parts = noctalia::ipc::splitWords(args);
+  ipc.bind(chiroptera::cli::msg::brightnessSet, [this, applyToTargets](const std::string& args) -> std::string {
+    const auto parts = chiroptera::ipc::splitWords(args);
     if (parts.empty() || parts.size() > 2) {
       return "error: brightness-set requires <value> or <target> <value>\n";
     }
@@ -1679,7 +1679,7 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
       valueToken = parts[1];
     }
 
-    const auto amount = noctalia::ipc::parseNormalizedOrPercent(valueToken);
+    const auto amount = chiroptera::ipc::parseNormalizedOrPercent(valueToken);
     if (!amount.has_value()) {
       return "error: invalid brightness value (use percent like 65 or 65%, or normalized like 0.65)\n";
     }
@@ -1689,10 +1689,10 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
     });
   });
 
-  auto registerDeltaHandler = [this, &ipc, applyToTargets](const noctalia::cli::Command& command, float direction) {
+  auto registerDeltaHandler = [this, &ipc, applyToTargets](const chiroptera::cli::Command& command, float direction) {
     const std::string_view commandName = command.name;
     ipc.bind(command, [this, applyToTargets, commandName, direction](const std::string& args) -> std::string {
-      const auto parts = noctalia::ipc::splitWords(args);
+      const auto parts = chiroptera::ipc::splitWords(args);
       if (parts.size() > 2) {
         return "error: " + std::string(commandName) + " accepts at most [target] [step]\n";
       }
@@ -1700,7 +1700,7 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
       std::string target = "current";
       std::optional<float> step = kDefaultBrightnessStep;
       if (parts.size() == 1) {
-        const auto maybeStep = noctalia::ipc::parseNormalizedOrPercent(parts[0]);
+        const auto maybeStep = chiroptera::ipc::parseNormalizedOrPercent(parts[0]);
         if (maybeStep.has_value()) {
           step = maybeStep;
         } else {
@@ -1708,7 +1708,7 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
         }
       } else if (parts.size() == 2) {
         target = parts[0];
-        step = noctalia::ipc::parseNormalizedOrPercent(parts[1]);
+        step = chiroptera::ipc::parseNormalizedOrPercent(parts[1]);
       }
 
       if (!step.has_value()) {
@@ -1721,11 +1721,11 @@ void BrightnessService::registerIpc(IpcService& ipc, std::function<void(BatchCha
     });
   };
 
-  registerDeltaHandler(noctalia::cli::msg::brightnessUp, 1.0F);
-  registerDeltaHandler(noctalia::cli::msg::brightnessDown, -1.0F);
+  registerDeltaHandler(chiroptera::cli::msg::brightnessUp, 1.0F);
+  registerDeltaHandler(chiroptera::cli::msg::brightnessDown, -1.0F);
 
   ipc.bind(
-      noctalia::cli::msg::brightnessListBacklightDevices,
+      chiroptera::cli::msg::brightnessListBacklightDevices,
       [](const std::string& /*args*/) -> std::string {
         const std::string backlightDir = "/sys/class/backlight";
         DIR* dir = ::opendir(backlightDir.c_str());

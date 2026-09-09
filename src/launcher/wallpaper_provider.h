@@ -5,14 +5,14 @@
 class ConfigService;
 class WaylandConnection;
 
-namespace noctalia::theme {
+namespace chiroptera::theme {
   class ThemeService;
 }
 
 class WallpaperProvider : public LauncherProvider {
 public:
   WallpaperProvider(
-      ConfigService* config, WaylandConnection* wayland, noctalia::theme::ThemeService* themeService = nullptr
+      ConfigService* config, WaylandConnection* wayland, chiroptera::theme::ThemeService* themeService = nullptr
   );
 
   [[nodiscard]] std::string_view defaultPrefix() const override { return "wall"; }
@@ -28,5 +28,5 @@ public:
 private:
   ConfigService* m_config = nullptr;
   WaylandConnection* m_wayland = nullptr;
-  noctalia::theme::ThemeService* m_themeService = nullptr;
+  chiroptera::theme::ThemeService* m_themeService = nullptr;
 };

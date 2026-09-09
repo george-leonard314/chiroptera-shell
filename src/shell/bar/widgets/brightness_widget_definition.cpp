@@ -1,10 +1,10 @@
 #include "shell/bar/widgets/brightness_widget_definition.h"
 
-const noctalia::bar::WidgetDefinition<BrightnessWidget::Options>& brightnessWidgetDefinition() {
-  using noctalia::bar::field;
+const chiroptera::bar::WidgetDefinition<BrightnessWidget::Options>& brightnessWidgetDefinition() {
+  using chiroptera::bar::field;
   using Options = BrightnessWidget::Options;
 
-  static const noctalia::bar::WidgetDefinition<Options> definition{
+  static const chiroptera::bar::WidgetDefinition<Options> definition{
       .type = "brightness",
       .fields = {
           field<&Options::showLabel>({

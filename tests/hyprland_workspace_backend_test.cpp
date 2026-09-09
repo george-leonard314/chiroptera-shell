@@ -96,7 +96,7 @@ namespace {
 } // namespace
 
 int main() {
-  const std::string runtimeDir = "/tmp/noctalia-hypr-workspace-test-" + std::to_string(::getpid());
+  const std::string runtimeDir = "/tmp/chiroptera-hypr-workspace-test-" + std::to_string(::getpid());
   const std::string signature = "test";
   const std::string socketDir = runtimeDir + "/hypr/" + signature;
 

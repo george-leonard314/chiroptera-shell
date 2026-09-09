@@ -1,4 +1,4 @@
-project('noctalia', ['c', 'cpp'],
+project('chiroptera', ['c', 'cpp'],
   version: '5.0.1',
   default_options: [
     'cpp_std=c++23',
@@ -112,7 +112,7 @@ if is_glibc
   jemalloc_dep = dependency('jemalloc', required: jemalloc_option)
   if jemalloc_dep.found()
     jemalloc_deps += [jemalloc_dep]
-    jemalloc_cpp_args += ['-DNOCTALIA_USE_JEMALLOC=1']
+    jemalloc_cpp_args += ['-DCHIROPTERA_USE_JEMALLOC=1']
   endif
 endif
 
@@ -418,7 +418,7 @@ _protocol_sources += _wlr_ls_c
 _protocol_headers += _wlr_ls_h
 
 # ── Main sources ──────────────────────────────────────────────────────────────
-_noctalia_sources = files(
+_chiroptera_sources = files(
   'src/app/application.cpp',
   'src/app/application_events.cpp',
   'src/app/application_ipc.cpp',
@@ -1000,14 +1000,14 @@ _noctalia_sources = files(
 )
 
 if sanitize
-  _noctalia_sources += files('src/core/lsan_suppressions.cpp')
+  _chiroptera_sources += files('src/core/lsan_suppressions.cpp')
 endif
 
 git_program = find_program('git', required: false)
 if git_program.found()
   _git_revision_h = vcs_tag(
     input: 'src/core/git_revision.h.in',
-    output: 'noctalia_git_revision.h',
+    output: 'chiroptera_git_revision.h',
     command: [git_program, 'describe', '--tags', '--always', '--dirty=-dirty', '--abbrev=12'],
     fallback: 'unknown',
   )
@@ -1016,13 +1016,13 @@ else
   _git_revision_config.set('VCS_TAG', 'unknown')
   _git_revision_h = configure_file(
     input: 'src/core/git_revision.h.in',
-    output: 'noctalia_git_revision.h',
+    output: 'chiroptera_git_revision.h',
     configuration: _git_revision_config,
   )
 endif
 
 # ── Include directories ────────────────────────────────────────────────────────
-_noctalia_inc = [
+_chiroptera_inc = [
   include_directories('src'),
   include_directories('third_party/wuffs', is_system: true),
   # '.' adds both the source root and the corresponding build-dir root, so
@@ -1031,7 +1031,7 @@ _noctalia_inc = [
 ]
 
 # ── Application library and executable ────────────────────────────────────────
-_noctalia_system_dependencies = [
+_chiroptera_system_dependencies = [
   sdbus_cpp_dep,
   wayland_client_dep,
   egl_dep,
@@ -1071,67 +1071,67 @@ _noctalia_system_dependencies = [
   sndfile_dep,
 ] + jemalloc_deps + (dl_dep.found() ? [dl_dep] : [])
 
-_noctalia_dependencies = _noctalia_system_dependencies + [
+_chiroptera_dependencies = _chiroptera_system_dependencies + [
   fzy_dep,
   mcu_dep,
   luau_dep,
 ]
 
-_noctalia_test_dependencies = _noctalia_system_dependencies + [
+_chiroptera_test_dependencies = _chiroptera_system_dependencies + [
   _fzy_selective_dep,
   _mcu_selective_dep,
   _luau_selective_dep,
 ]
 
-_noctalia_compile_definitions = [
-  '-DNOCTALIA_INSTALL_PREFIX="' + get_option('prefix') + '"',
-  '-DNOCTALIA_INSTALL_DATADIR="' + get_option('datadir') + '"',
-  '-DNOCTALIA_VERSION="' + meson.project_version() + '"',
+_chiroptera_compile_definitions = [
+  '-DCHIROPTERA_INSTALL_PREFIX="' + get_option('prefix') + '"',
+  '-DCHIROPTERA_INSTALL_DATADIR="' + get_option('datadir') + '"',
+  '-DCHIROPTERA_VERSION="' + meson.project_version() + '"',
 ] + jemalloc_cpp_args
 
-_noctalia_cpp_args = [
+_chiroptera_cpp_args = [
   '-Wall', '-Wextra', '-Wno-missing-field-initializers', '-Wpedantic', '-Wconversion', '-Wshadow',
-] + _noctalia_compile_definitions
+] + _chiroptera_compile_definitions
 
 # Production sources and generated protocols compile once. The shell links the
 # archive whole; tests link it normally so only the objects they exercise enter
 # each test executable.
-noctalia_core_lib = static_library('noctalia_core',
-  sources: _noctalia_sources + _protocol_sources + _protocol_headers + [_git_revision_h],
-  dependencies: _noctalia_dependencies,
-  include_directories: _noctalia_inc,
-  cpp_args: _noctalia_cpp_args,
+chiroptera_core_lib = static_library('chiroptera_core',
+  sources: _chiroptera_sources + _protocol_sources + _protocol_headers + [_git_revision_h],
+  dependencies: _chiroptera_dependencies,
+  include_directories: _chiroptera_inc,
+  cpp_args: _chiroptera_cpp_args,
 )
 
-noctalia_core_dep = declare_dependency(
-  link_with: noctalia_core_lib,
-  dependencies: _noctalia_test_dependencies,
-  include_directories: _noctalia_inc,
-  compile_args: _noctalia_compile_definitions,
+chiroptera_core_dep = declare_dependency(
+  link_with: chiroptera_core_lib,
+  dependencies: _chiroptera_test_dependencies,
+  include_directories: _chiroptera_inc,
+  compile_args: _chiroptera_compile_definitions,
   sources: _protocol_headers,
 )
 
-noctalia_exe = executable('noctalia',
+chiroptera_exe = executable('chiroptera',
   sources: files('src/main.cpp') + _protocol_headers,
-  dependencies: _noctalia_dependencies,
-  include_directories: _noctalia_inc,
-  cpp_args: _noctalia_cpp_args,
-  objects: noctalia_core_lib.extract_all_objects(recursive: false),
+  dependencies: _chiroptera_dependencies,
+  include_directories: _chiroptera_inc,
+  cpp_args: _chiroptera_cpp_args,
+  objects: chiroptera_core_lib.extract_all_objects(recursive: false),
   install: true,
 )
 
 install_subdir('assets',
-  install_dir: get_option('datadir') / 'noctalia',
-  exclude_files: ['dev.noctalia.Noctalia.desktop'],
+  install_dir: get_option('datadir') / 'chiroptera',
+  exclude_files: ['dev.chiroptera.Chiroptera.desktop'],
 )
 
 install_data(
-  'assets/dev.noctalia.Noctalia.desktop',
+  'assets/dev.chiroptera.Chiroptera.desktop',
   install_dir: get_option('datadir') / 'applications',
 )
 
 install_data(
-  'assets/noctalia.svg',
+  'assets/chiroptera.svg',
   install_dir: get_option('datadir') / 'icons' / 'hicolor' / 'scalable' / 'apps',
 )
 
@@ -1258,7 +1258,7 @@ if build_tests
     endif
     test_exe = executable(test_name + '_test',
       sources: files('tests' / (test_name + '_test.cpp')),
-      dependencies: noctalia_core_dep,
+      dependencies: chiroptera_core_dep,
       override_options: ['b_ndebug=false'],
     )
     test_args = []
@@ -1272,7 +1272,7 @@ if build_tests
 
   upower_integration_exe = executable('upower_charge_limit_integration_test',
     sources: files('tests/upower_charge_limit_integration_test.cpp'),
-    dependencies: noctalia_core_dep,
+    dependencies: chiroptera_core_dep,
   )
   dbus_run_session = find_program('dbus-run-session', required: false)
   if dbus_run_session.found()
@@ -1288,15 +1288,15 @@ if build_tests
   endif
 
   config_validate_env = environment()
-  config_validate_env.set('NOCTALIA_CONFIG_HOME', meson.current_source_dir() / 'tests/config_validate/config-home')
-  config_validate_env.set('NOCTALIA_STATE_HOME', meson.current_source_dir() / 'tests/config_validate/state-home')
-  config_validate_env.set('NOCTALIA_DATA_HOME', meson.current_source_dir() / 'tests/config_validate/data-home')
+  config_validate_env.set('CHIROPTERA_CONFIG_HOME', meson.current_source_dir() / 'tests/config_validate/config-home')
+  config_validate_env.set('CHIROPTERA_STATE_HOME', meson.current_source_dir() / 'tests/config_validate/state-home')
+  config_validate_env.set('CHIROPTERA_DATA_HOME', meson.current_source_dir() / 'tests/config_validate/data-home')
 
   sh_program = find_program('sh')
   test('config_validate_cli',
     sh_program,
-    args: ['tests/config_validate_cli_test.sh', noctalia_exe.full_path()],
-    depends: noctalia_exe,
+    args: ['tests/config_validate_cli_test.sh', chiroptera_exe.full_path()],
+    depends: chiroptera_exe,
     workdir: meson.current_source_dir(),
     env: config_validate_env,
   )

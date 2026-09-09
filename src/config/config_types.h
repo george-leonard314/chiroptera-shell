@@ -240,7 +240,7 @@ struct ShellSessionConfig {
   // Optional overrides for built-in session power commands. Empty = auto-detect at runtime.
   struct ShellSessionPowerConfig {
     // Shell strings run with `/bin/sh -lc` (shell=True).
-    // When unset, Noctalia tries a prioritized backend list (systemd/logind/privileged helpers).
+    // When unset, Chiroptera tries a prioritized backend list (systemd/logind/privileged helpers).
     std::optional<std::string> suspend;
     std::optional<std::string> reboot;
     std::optional<std::string> shutdown;
@@ -1108,7 +1108,7 @@ struct ShellConfig {
   /// stays pasteable. Independent of history retention: this keeps the live clipboard, not the stored history.
   bool clipboardKeepFromClosedApps = true;
   /// Maximum unpinned clipboard history entries retained (pinned entries are exempt).
-  int clipboardHistoryMaxEntries = static_cast<int>(noctalia::config::kClipboardHistoryDefaultEntries);
+  int clipboardHistoryMaxEntries = static_cast<int>(chiroptera::config::kClipboardHistoryDefaultEntries);
   /// When true, clearing clipboard history or deleting unpinned entries from the panel asks for confirmation first.
   bool clipboardConfirmClearHistory = true;
   /// Disables per-app tracking and Control Center usage UI.
@@ -1199,55 +1199,55 @@ struct SystemConfig {
     float networkPollSeconds = 3.0F;
     float diskPollSeconds = 10.0F;
     double cpuUsageActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuUsage).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuUsage).activityDefault;
     double cpuUsageCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuUsage).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuUsage).criticalDefault;
     double cpuTempActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuTemp).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuTemp).activityDefault;
     double cpuTempCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuTemp).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuTemp).criticalDefault;
     double cpuFreqActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuFreq).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuFreq).activityDefault;
     double cpuFreqCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::CpuFreq).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::CpuFreq).criticalDefault;
     double gpuTempActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuTemp).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuTemp).activityDefault;
     double gpuTempCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuTemp).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuTemp).criticalDefault;
     double gpuUsageActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuUsage).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuUsage).activityDefault;
     double gpuUsageCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuUsage).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuUsage).criticalDefault;
     double gpuVramActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuVram).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuVram).activityDefault;
     double gpuVramCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::GpuVram).criticalDefault;
-    double ramPctActivityThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::RamPct).activityDefault;
-    double ramPctCriticalThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::RamPct).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::GpuVram).criticalDefault;
+    double ramPctActivityThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::RamPct).activityDefault;
+    double ramPctCriticalThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::RamPct).criticalDefault;
     double swapPctActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::SwapPct).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::SwapPct).activityDefault;
     double swapPctCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::SwapPct).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::SwapPct).criticalDefault;
     double diskUsedPctActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskUsedPct).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskUsedPct).activityDefault;
     double diskUsedPctCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskUsedPct).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskUsedPct).criticalDefault;
     double diskUsedActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskUsed).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskUsed).activityDefault;
     double diskUsedCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskUsed).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskUsed).criticalDefault;
     double diskFreePctActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskFreePct).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskFreePct).activityDefault;
     double diskFreePctCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskFreePct).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskFreePct).criticalDefault;
     double diskFreeActivityThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskFree).activityDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskFree).activityDefault;
     double diskFreeCriticalThreshold =
-        noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::DiskFree).criticalDefault;
-    double netRxActivityThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::NetRx).activityDefault;
-    double netRxCriticalThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::NetRx).criticalDefault;
-    double netTxActivityThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::NetTx).activityDefault;
-    double netTxCriticalThreshold = noctalia::sysmon::thresholdProfile(noctalia::sysmon::Stat::NetTx).criticalDefault;
+        chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::DiskFree).criticalDefault;
+    double netRxActivityThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::NetRx).activityDefault;
+    double netRxCriticalThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::NetRx).criticalDefault;
+    double netTxActivityThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::NetTx).activityDefault;
+    double netTxCriticalThreshold = chiroptera::sysmon::thresholdProfile(chiroptera::sysmon::Stat::NetTx).criticalDefault;
 
     bool operator==(const MonitorConfig&) const = default;
   };
@@ -1447,7 +1447,7 @@ constexpr EnumOption<ThemeMode> kThemeModes[] = {
     {ThemeMode::Auto, "auto", "common.states.auto"},
 };
 
-// Noctalia's own light/dark mode. `follow` tracks [theme].mode, which always drives apps
+// Chiroptera's own light/dark mode. `follow` tracks [theme].mode, which always drives apps
 // (templates and the GTK color scheme); the other values pin the shell independently.
 enum class ShellThemeMode : std::uint8_t {
   Follow = 0,
@@ -1543,7 +1543,7 @@ struct ThemeConfig {
   };
 
   PaletteSource source = PaletteSource::Builtin;
-  std::string builtinPalette = "Noctalia";
+  std::string builtinPalette = "Chiroptera";
   std::string communityPalette = "Oxocarbon";
   std::string customPalette;
   std::string wallpaperScheme = "m3-content";
@@ -1555,7 +1555,7 @@ struct ThemeConfig {
   bool operator==(const ThemeConfig&) const = default;
 };
 
-// The theme mode Noctalia's own surfaces run in, still expressed as a ThemeMode so `auto`
+// The theme mode Chiroptera's own surfaces run in, still expressed as a ThemeMode so `auto`
 // keeps resolving against the day/night schedule.
 [[nodiscard]] constexpr ThemeMode shellThemeMode(const ThemeConfig& theme) noexcept {
   switch (theme.shellMode) {

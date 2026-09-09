@@ -1,8 +1,8 @@
-# Building Noctalia from source
+# Building Chiroptera from source
 
 This guide covers source dependencies, distro-specific package installation, build modes, and install layouts.
 For prebuilt packages and other installation methods, see the
-[installation documentation](https://docs.noctalia.dev/noctalia/getting-started/installation/).
+[installation documentation](https://docs.noctalia.dev/chiroptera/getting-started/installation/).
 
 ## Dependencies
 
@@ -123,8 +123,8 @@ Polkit agent support requires development files that provide the `polkit-agent-1
 modules. Some distros ship these in the runtime `polkit` package, while split-package distros use names such as
 `polkit-devel`, `polkit-dev`, or `libpolkit-agent-1-dev` / `libpolkit-gobject-1-dev`.
 
-Pipewire libraries/headers are sufficient to build Noctalia, but there is also a runtime requirement for the pipewire
-daemon. Noctalia will abort startup if it can't connect to the daemon. If your distro splits the pipewire libraries
+Pipewire libraries/headers are sufficient to build Chiroptera, but there is also a runtime requirement for the pipewire
+daemon. Chiroptera will abort startup if it can't connect to the daemon. If your distro splits the pipewire libraries
 and daemon into separate packages, make sure you have both installed.
 
 `upower` is an optional dependency used for battery and power device integration.
@@ -132,7 +132,7 @@ and daemon into separate packages, make sure you have both installed.
 `ddcutil` is an optional dependency used for controlling monitor brightness.
 
 Credential and encrypted-state persistence requires a Secret Service provider at runtime, such as GNOME Keyring,
-KWallet, or KeePassXC. `libsecret` is the client library and does not provide the session service by itself. Noctalia
+KWallet, or KeePassXC. `libsecret` is the client library and does not provide the session service by itself. Chiroptera
 continues to run when no provider is available, but features requiring durable secrets cannot persist them.
 CalDAV accounts may instead read their password from one explicitly configured regular file, which supports secret
 provisioners such as agenix and sops-nix without installing a Secret Service provider. Google refresh tokens and
@@ -193,7 +193,7 @@ just build
 just run
 ```
 
-Unit tests are not compiled by `just build`, which targets only the Noctalia executable. Build and run them explicitly
+Unit tests are not compiled by `just build`, which targets only the Chiroptera executable. Build and run them explicitly
 with `just test` (use `just test release` to force them on for a release build). Direct Meson users can control test
 target generation with the `-Dtests=enabled|disabled|auto` option.
 Production sources compile once into an internal static library shared by the shell and test executables.
@@ -201,28 +201,28 @@ Production sources compile once into an internal static library shared by the sh
 Meson installs the binary and shipped assets using the normal prefix layout:
 
 ```text
-/usr/local/bin/noctalia
-/usr/local/share/noctalia/assets/...
+/usr/local/bin/chiroptera
+/usr/local/share/chiroptera/assets/...
 ```
 
-Noctalia needs the shipped `assets/` tree at runtime. Copying only the `noctalia` binary is not enough.
+Chiroptera needs the shipped `assets/` tree at runtime. Copying only the `chiroptera` binary is not enough.
 
 Firefox theming uses the built-in template `post_action = "firefox-theme"` (same pattern as
 `kde-color-scheme`) plus the [Pywalfox](https://addons.mozilla.org/en-US/firefox/addon/pywalfox/)
-browser extension. Manual host helpers: `noctalia firefox-theme --help`.
+browser extension. Manual host helpers: `chiroptera firefox-theme --help`.
 
 Portable bundle layouts are also supported:
 
 ```text
 bundle/
-  noctalia
+  chiroptera
   assets/
 ```
 
 ```text
 bundle/
-  bin/noctalia
-  share/noctalia/assets/
+  bin/chiroptera
+  share/chiroptera/assets/
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md#runtime-assets) for the full runtime asset lookup order.

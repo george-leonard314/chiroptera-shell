@@ -26,7 +26,7 @@
 #include <unistd.h>
 
 #ifdef __GLIBC__
-#ifdef NOCTALIA_USE_JEMALLOC
+#ifdef CHIROPTERA_USE_JEMALLOC
 #include <jemalloc/jemalloc.h>
 #else
 #include <malloc.h>
@@ -37,7 +37,7 @@ namespace {
 
   enum class SpawnResult { Parent, Error };
 
-  constexpr const char* kDaemonPipeEnv = "NOCTALIA_DAEMON_PIPE_FD";
+  constexpr const char* kDaemonPipeEnv = "CHIROPTERA_DAEMON_PIPE_FD";
   int g_daemonPipe = -1;
 
   void closeFd(int& fd) {
@@ -130,12 +130,12 @@ namespace {
 
   int runTopLevelFlag(const char* flag) {
     if (std::strcmp(flag, "--version") == 0 || std::strcmp(flag, "-v") == 0) {
-      const std::string version = noctalia::build_info::displayVersion();
-      std::println("noctalia {}", version);
+      const std::string version = chiroptera::build_info::displayVersion();
+      std::println("chiroptera {}", version);
       return 0;
     }
     if (std::strcmp(flag, "--help") == 0 || std::strcmp(flag, "-h") == 0) {
-      std::print("{}", noctalia::cli::renderHelp(noctalia::cli::kRootCmd, "noctalia"));
+      std::print("{}", chiroptera::cli::renderHelp(chiroptera::cli::kRootCmd, "chiroptera"));
       return 0;
     }
     return -1;
@@ -224,7 +224,7 @@ namespace {
     // is settled before bars or surfaces are created. Held for the process lifetime.
     SingleInstanceLock instanceLock;
     if (!instanceLock.tryAcquire()) {
-      std::println(stderr, "error: noctalia is already running");
+      std::println(stderr, "error: chiroptera is already running");
       completeDaemonStartup(1);
       _exit(1);
     }
@@ -241,7 +241,7 @@ namespace {
 
 } // namespace
 
-#ifdef NOCTALIA_USE_JEMALLOC
+#ifdef CHIROPTERA_USE_JEMALLOC
 // jemalloc reads this before its first allocation; the background thread runs
 // decay even while the shell is idle.
 const char* malloc_conf = "background_thread:true,narenas:2,dirty_decay_ms:1000,muzzy_decay_ms:5000,lg_tcache_max:12";
@@ -249,7 +249,7 @@ const char* malloc_conf = "background_thread:true,narenas:2,dirty_decay_ms:1000,
 
 int main(int argc, char* argv[]) {
 
-#if defined(__GLIBC__) && !defined(NOCTALIA_USE_JEMALLOC)
+#if defined(__GLIBC__) && !defined(CHIROPTERA_USE_JEMALLOC)
   mallopt(M_ARENA_MAX, 2);
 #endif
 
@@ -274,22 +274,22 @@ int main(int argc, char* argv[]) {
   }
 
   if (argc >= 2) {
-    if (noctalia::theme::isFirefoxNativeMessagingLaunch(argc, argv))
-      return noctalia::theme::runFirefoxNativeMessagingHost();
+    if (chiroptera::theme::isFirefoxNativeMessagingLaunch(argc, argv))
+      return chiroptera::theme::runFirefoxNativeMessagingHost();
     if (std::strcmp(argv[1], "completions") == 0)
-      return noctalia::cli::runCompletionsCli(argc, argv);
+      return chiroptera::cli::runCompletionsCli(argc, argv);
     if (std::strcmp(argv[1], "firefox-theme") == 0)
-      return noctalia::theme::runFirefoxThemeCli(argc, argv);
+      return chiroptera::theme::runFirefoxThemeCli(argc, argv);
     if (std::strcmp(argv[1], "theme") == 0)
-      return noctalia::theme::runCli(argc, argv);
+      return chiroptera::theme::runCli(argc, argv);
     if (std::strcmp(argv[1], "msg") == 0)
-      return noctalia::ipc::runCli(argc, argv);
+      return chiroptera::ipc::runCli(argc, argv);
     if (std::strcmp(argv[1], "config") == 0)
-      return noctalia::config::runCli(argc, argv);
+      return chiroptera::config::runCli(argc, argv);
     if (std::strcmp(argv[1], "dmenu") == 0)
-      return noctalia::launcher::runDmenuCli(argc, argv);
+      return chiroptera::launcher::runDmenuCli(argc, argv);
     if (std::strcmp(argv[1], "plugins") == 0)
-      return noctalia::plugins::runCli(argc, argv);
+      return chiroptera::plugins::runCli(argc, argv);
   }
 
   for (int i = 1; i < argc; ++i) {
@@ -305,7 +305,7 @@ int main(int argc, char* argv[]) {
 
   if (argc >= 2) {
     std::println(stderr, "error: unknown command: {}", argv[1]);
-    std::println(stderr, "Run 'noctalia --help' for usage.");
+    std::println(stderr, "Run 'chiroptera --help' for usage.");
     return 1;
   }
 
@@ -333,7 +333,7 @@ int main(int argc, char* argv[]) {
         return 1;
       }
       if (daemonResult == 0) {
-        std::println("noctalia started [pid: {}]", pid);
+        std::println("chiroptera started [pid: {}]", pid);
       }
       return daemonResult;
     }

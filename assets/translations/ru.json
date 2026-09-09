@@ -737,10 +737,10 @@
       "dbus-disabled": "DBus-уведомления отключены",
       "desktop-widgets-editor": "Редактор виджетов",
       "desktop-widgets-editor-enabled": "Редактор виджетов рабочего стола включён. Переключитесь на пустое рабочее пространство, чтобы увидеть оверлей редактора.",
-      "greeter-sync": "Noctalia Greeter",
+      "greeter-sync": "Chiroptera Greeter",
       "greeter-sync-pending-manual": "Файлы подготовлены. Запустите в терминале: pkexec noctalia-greeter-apply-appearance \"$XDG_RUNTIME_DIR/noctalia-greeter-sync\". Или задайте shell.greeter_sync.privilege_command (например, ghostty -e pkexec) и повторите синхронизацию.",
       "greeter-sync-success": "Внешний вид синхронизирован. Изменения вступят в силу на следующем экране входа.",
-      "keybind-app": "Noctalia",
+      "keybind-app": "Chiroptera",
       "keybind-invalid-modifier": "Это сочетание клавиш принимает одну клавишу без модификаторов.",
       "keybind-invalid-printable": "Печатные клавиши (буквы, цифры, символы) требуют модификатор, например Ctrl или Alt.",
       "keybind-invalid-super": "Клавишу Super/Windows нельзя использовать в сочетаниях клавиш командной строки.",
@@ -1046,7 +1046,7 @@
       },
       "reset-page": "Не удалось сбросить некоторые настройки.",
       "support-report": "Не удалось сохранить отчёт поддержки.",
-      "sync-greeter": "Не удалось синхронизировать внешний вид с Noctalia Greeter.",
+      "sync-greeter": "Не удалось синхронизировать внешний вид с Chiroptera Greeter.",
       "sync-greeter-timeout-manual": "Для синхронизации Greeter всё ещё требуется подтверждение администратора. Запустите в терминале: pkexec noctalia-greeter-apply-appearance \"$XDG_RUNTIME_DIR/noctalia-greeter-sync\"",
       "widget": {
         "rename": "Не удалось переименовать виджет."
@@ -1398,8 +1398,8 @@
         },
         "kind-label": "Тип",
         "location-label": "Местоположение",
-        "location-placeholder-git": "https://github.com/me/noctalia-plugins",
-        "location-placeholder-path": "~/dev/noctalia-plugins",
+        "location-placeholder-git": "https://github.com/me/chiroptera-plugins",
+        "location-placeholder-path": "~/dev/chiroptera-plugins",
         "name-label": "ID источника",
         "name-placeholder": "my-plugins",
         "precedence-hint": "Источники, расположенные ниже, имеют приоритет над высшими при совпадении плагинов.",
@@ -1409,7 +1409,7 @@
         "update": "Обновить"
       },
       "store": {
-        "add": "Добавить в Noctalia",
+        "add": "Добавить в Chiroptera",
         "categories": "Категории",
         "category-all": "Все",
         "empty": "Плагины не найдены",
@@ -1462,7 +1462,7 @@
           "label": "Скругление углов"
         },
         "custom-palette": {
-          "description": "Выберите палитру из ~/.config/noctalia/palettes/",
+          "description": "Выберите палитру из ~/.config/chiroptera/palettes/",
           "label": "Пользовательская палитра",
           "search-placeholder": "Поиск пользовательских палитр..."
         },
@@ -1904,7 +1904,7 @@
             "label": "При выключении"
           },
           "started": {
-            "description": "Команда для запуска после запуска Noctalia",
+            "description": "Команда для запуска после запуска Chiroptera",
             "label": "При запуске"
           },
           "theme-mode-changed": {
@@ -2450,7 +2450,7 @@
           "label": "Авто-Синхронизация Greeter"
         },
         "launch-apps-as-systemd-services": {
-          "description": "Запускать приложения в отдельных службах systemd, чтобы они не использовали cgroup Noctalia",
+          "description": "Запускать приложения в отдельных службах systemd, чтобы они не использовали cgroup Chiroptera",
           "label": "Запускать приложения как службы systemd"
         },
         "niri-overview-type-to-launch": {
@@ -2597,8 +2597,8 @@
         },
         "sync-greeter": {
           "button": "Синхронизировать Cейчас",
-          "description": "Скопировать текущие обои и цвета в Noctalia Greeter (требуется одобрение администратора)",
-          "label": "Noctalia Greeter"
+          "description": "Скопировать текущие обои и цвета в Chiroptera Greeter (требуется одобрение администратора)",
+          "label": "Chiroptera Greeter"
         },
         "telemetry": {
           "description": "Отправлять небольшой анонимный ping при запуске с версией, ОС, композитором, разрешениями мониторов, RAM и масштабом UI",
@@ -3217,7 +3217,7 @@
       "export-config": "Экспортировать конфигурацию…",
       "export-config-saved": "Экспорт конфигурации сохранён.",
       "filter-overridden": "Измененные",
-      "native-title": "Настройки Noctalia",
+      "native-title": "Настройки Chiroptera",
       "no-results": "Настройки не найдены",
       "no-results-hint": "Попробуйте другое имя параметра или ключ конфигурации.",
       "reset-page": "Сбросить страницу",
@@ -3238,7 +3238,7 @@
     "no-wallpaper-selected": "Обои не выбраны",
     "select-wallpaper": "Выбрать обои",
     "subtitle": "Несколько быстрых вариантов для начала.",
-    "title": "Добро пожаловать в Noctalia",
+    "title": "Добро пожаловать в Chiroptera",
     "wallpaper": "Обои",
     "wallpaper-scheme": "Схема обоев"
   },

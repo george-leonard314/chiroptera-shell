@@ -17,7 +17,7 @@ resolve_config_home() {
 
 config_dir="$(resolve_config_home)/umbriel"
 config_file="$config_dir/config.toml"
-include_line='files = ["noctalia.toml"]'
+include_line='files = ["chiroptera.toml"]'
 
 mkdir -p "$config_dir"
 
@@ -31,12 +31,12 @@ trap 'rm -f "$tmp_file"' EXIT
 
 awk '
     function add_files() {
-        print "files = [\"noctalia.toml\"]"
+        print "files = [\"chiroptera.toml\"]"
         added = 1
     }
 
     # Rebuild a complete "files = [ ... ]" statement (buf may span lines),
-    # dropping any existing noctalia.toml entry and appending it last so it
+    # dropping any existing chiroptera.toml entry and appending it last so it
     # overrides earlier includes. Handles single-line and multi-line arrays.
     function build(buf,   open, endp, i, head, inner, tail, test, multiline, indent) {
         open = index(buf, "[")
@@ -51,9 +51,9 @@ awk '
         inner = substr(buf, open + 1, endp - open - 1)
         tail  = substr(buf, endp)
 
-        gsub(/"noctalia\.toml"[[:space:]]*,[[:space:]]*/, "", inner)
-        gsub(/,[[:space:]]*"noctalia\.toml"/, "", inner)
-        gsub(/"noctalia\.toml"/, "", inner)
+        gsub(/"chiroptera\.toml"[[:space:]]*,[[:space:]]*/, "", inner)
+        gsub(/,[[:space:]]*"chiroptera\.toml"/, "", inner)
+        gsub(/"chiroptera\.toml"/, "", inner)
 
         test = inner
         gsub(/[[:space:]]/, "", test)
@@ -64,17 +64,17 @@ awk '
             if (match(inner, /\n[ \t]*"/))
                 indent = substr(inner, RSTART + 1, RLENGTH - 2)
             if (test == "")
-                return head "\n" indent "\"noctalia.toml\",\n" tail
+                return head "\n" indent "\"chiroptera.toml\",\n" tail
             sub(/[[:space:]]+$/, "", inner)
             if (inner !~ /,$/)
                 inner = inner ","
-            return head inner "\n" indent "\"noctalia.toml\",\n" tail
+            return head inner "\n" indent "\"chiroptera.toml\",\n" tail
         }
 
         if (test == "")
-            return head "\"noctalia.toml\"" tail
+            return head "\"chiroptera.toml\"" tail
         sub(/[[:space:]]+$/, "", inner)
-        return head inner ", \"noctalia.toml\"" tail
+        return head inner ", \"chiroptera.toml\"" tail
     }
 
     collecting {

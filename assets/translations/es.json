@@ -762,19 +762,19 @@
       "calendar-google-connect-start-failed": "No se pudo iniciar la autorización de Google. Comprueba tu conexión a internet e inténtalo de nuevo.",
       "calendar-google-connect-start-http": "No se pudo iniciar la autorización de Google. El intermediario de OAuth devolvió HTTP {status}.",
       "calendar-google-connect-timeout": "La autorización de Google expiró. Inicie la conexión nuevamente cuando esté listo para iniciar sesión.",
-      "config-migration-body": "La configuración heredada se está migrando en memoria, incluyendo {path}. Actualice la configuración de origen; Settings y noctalia config validate muestran el reemplazo necesario.",
+      "config-migration-body": "La configuración heredada se está migrando en memoria, incluyendo {path}. Actualice la configuración de origen; Settings y chiroptera config validate muestran el reemplazo necesario.",
       "config-migration-title": "Se necesita actualizar configuracion",
       "dbus-disabled": "Notificaciones DBus deshabilitada",
       "desktop-widgets-editor": "Editor de Widget",
       "desktop-widgets-editor-enabled": "El editor de widgets del escritorio está activado. Cambia a un espacio de trabajo vacío para ver el panel del editor.",
-      "greeter-sync": "Noctalia Greeter",
+      "greeter-sync": "Chiroptera Greeter",
       "greeter-sync-pending": "Esperando la aprobación del administrador para escribir en la pantalla de inicio.",
-      "greeter-sync-pending-console": "Esperando la aprobación del administrador. Aprueba el aviso de polkit en Noctalia, en una TTY o consola, o ejecuta pkexec manualmente.",
+      "greeter-sync-pending-console": "Esperando la aprobación del administrador. Aprueba el aviso de polkit en Chiroptera, en una TTY o consola, o ejecuta pkexec manualmente.",
       "greeter-sync-pending-manual": "Los archivos están preparados. Ejecuta en una terminal: pkexec noctalia-greeter-apply-appearance \"$XDG_RUNTIME_DIR/noctalia-greeter-sync\". O configura shell.greeter_sync.privilege_command (por ejemplo ghostty -e pkexec) y sincroniza de nuevo.",
       "greeter-sync-success": "Apariencia sincronizada. Los cambios se aplicarán en la siguiente pantalla de inicio de sesión.",
       "greeter-sync-timeout": "La sincronización de la pantalla de inicio sigue esperando la aprobación del administrador. Revisa una TTY o consola en busca de un aviso de polkit, activa el agente de polkit en la configuración de seguridad, o ejecuta pkexec manualmente.",
       "greeter-sync-timeout-manual": "La sincronización de la pantalla de inicio aún necesita la aprobación del administrador. Ejecuta en una terminal: pkexec noctalia-greeter-apply-appearance \"$XDG_RUNTIME_DIR/noctalia-greeter-sync\"",
-      "keybind-app": "Noctalia",
+      "keybind-app": "Chiroptera",
       "keybind-invalid-modifier": "Este atajo acepta una sola tecla sin modificadores.",
       "keybind-invalid-printable": "Las teclas imprimibles (letras, números, símbolos) requieren un modificador como Ctrl o Alt.",
       "keybind-invalid-super": "La tecla Super/Windows no se puede usar en los atajos de teclado del shell.",
@@ -846,7 +846,7 @@
     },
     "enable-failed": {
       "body-error": "{plugin}: {error}",
-      "body-incompatible": "{plugin} requiere Noctalia {version} o más reciente",
+      "body-incompatible": "{plugin} requiere Chiroptera {version} o más reciente",
       "body-timeout": "{plugin} tardó demasiado en instalarse.",
       "title": "Complemento no habilitado"
     }
@@ -1120,7 +1120,7 @@
       },
       "reset-page": "No se pudieron restablecer algunas configuraciones.",
       "support-report": "No se pudo guardar el informe de soporte.",
-      "sync-greeter": "No se pudo sincronizar la apariencia con Noctalia Greeter.",
+      "sync-greeter": "No se pudo sincronizar la apariencia con Chiroptera Greeter.",
       "sync-greeter-timeout": "La sincronización de la pantalla de inicio sigue esperando la aprobación del administrador. Revisa una TTY o consola en busca de un aviso de polkit, activa el agente de polkit en la configuración de seguridad, o ejecuta pkexec manualmente.",
       "sync-greeter-timeout-manual": "La sincronización de la pantalla de inicio aún necesita la aprobación del administrador. Ejecuta en una terminal: pkexec noctalia-greeter-apply-appearance \"$XDG_RUNTIME_DIR/noctalia-greeter-sync\"",
       "widget": {
@@ -1498,8 +1498,8 @@
         },
         "kind-label": "Tipo",
         "location-label": "Ubicación",
-        "location-placeholder-git": "https://github.com/me/noctalia-plugins",
-        "location-placeholder-path": "~/dev/noctalia-plugins",
+        "location-placeholder-git": "https://github.com/me/chiroptera-plugins",
+        "location-placeholder-path": "~/dev/chiroptera-plugins",
         "name-label": "ID de fuente",
         "name-placeholder": "my-plugins",
         "precedence-hint": "Las fuentes inferiores anulan a las superiores cuando ofrecen el mismo plugin.",
@@ -1509,7 +1509,7 @@
         "update": "Actualizar"
       },
       "store": {
-        "add": "Añadir a Noctalia",
+        "add": "Añadir a Chiroptera",
         "categories": "Categorías",
         "category-all": "Todo",
         "empty": "No se encontraron plugins",
@@ -1565,7 +1565,7 @@
           "label": "Radio de las esquinas"
         },
         "custom-palette": {
-          "description": "Elige una paleta de ~/.config/noctalia/palettes/",
+          "description": "Elige una paleta de ~/.config/chiroptera/palettes/",
           "label": "Paleta personalizada",
           "search-placeholder": "Buscar paletas personalizadas..."
         },
@@ -2012,7 +2012,7 @@
             "label": "Al apagar"
           },
           "started": {
-            "description": "Comando a ejecutar después de que Noctalia se inicie",
+            "description": "Comando a ejecutar después de que Chiroptera se inicie",
             "label": "Al iniciar"
           },
           "theme-mode-changed": {
@@ -2020,7 +2020,7 @@
             "label": "Al cambiar el modo de tema"
           },
           "wallpaper-changed": {
-            "description": "Comando a ejecutar cuando cambia el fondo de pantalla; proporciona NOCTALIA_WALLPAPER_PATH y NOCTALIA_WALLPAPER_CONNECTOR",
+            "description": "Comando a ejecutar cuando cambia el fondo de pantalla; proporciona CHIROPTERA_WALLPAPER_PATH y CHIROPTERA_WALLPAPER_CONNECTOR",
             "label": "Al cambiar el fondo de pantalla"
           },
           "wifi-disabled": {
@@ -2663,7 +2663,7 @@
           "label": "Comando de privilegios para sincronizar pantalla de inicio"
         },
         "launch-apps-as-systemd-services": {
-          "description": "Inicia las aplicaciones en servicios systemd independientes para que no compartan el cgroup de Noctalia",
+          "description": "Inicia las aplicaciones en servicios systemd independientes para que no compartan el cgroup de Chiroptera",
           "label": "Iniciar aplicaciones como servicios systemd"
         },
         "launch-apps-custom-command": {
@@ -2845,8 +2845,8 @@
         },
         "sync-greeter": {
           "button": "Sincronizar ahora",
-          "description": "Copiar el fondo de pantalla y los colores actuales a Noctalia Greeter (requiere aprobación de administrador)",
-          "label": "Noctalia Greeter"
+          "description": "Copiar el fondo de pantalla y los colores actuales a Chiroptera Greeter (requiere aprobación de administrador)",
+          "label": "Chiroptera Greeter"
         },
         "telemetry": {
           "description": "Envía un pequeño ping anónimo de inicio con la versión, el SO, el compositor, las resoluciones de monitor, la RAM y la escala de la interfaz",
@@ -3548,7 +3548,7 @@
       "export-config": "Exportar configuración...",
       "export-config-saved": "Exportación de configuración guardada.",
       "filter-overridden": "Sobreescrito",
-      "native-title": "Ajustes de Noctalia",
+      "native-title": "Ajustes de Chiroptera",
       "no-results": "Ajustes no encontrados.",
       "no-results-hint": "Prueba con otro nombre de configuración o clave de config.",
       "reset-page": "Restablecer página",
@@ -3570,7 +3570,7 @@
     "no-wallpaper-selected": "Ningún fondo de pantalla seleccionado",
     "select-wallpaper": "Seleccionar fondo de pantalla",
     "subtitle": "Algunas opciones rápidas para empezar.",
-    "title": "Bienvenido a Noctalia",
+    "title": "Bienvenido a Chiroptera",
     "wallpaper": "Fondo de pantalla",
     "wallpaper-scheme": "Esquema de fondo de pantalla"
   },

@@ -10,5 +10,5 @@ struct BatteryWidgetDefinitionContext {
   UPowerService* upower = nullptr;
 };
 
-[[nodiscard]] const noctalia::bar::WidgetDefinition<BatteryWidget::Options, BatteryWidgetDefinitionContext>&
+[[nodiscard]] const chiroptera::bar::WidgetDefinition<BatteryWidget::Options, BatteryWidgetDefinitionContext>&
 batteryWidgetDefinition();

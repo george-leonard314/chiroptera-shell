@@ -19,7 +19,7 @@
 class ConfigService;
 class IpcService;
 
-namespace noctalia::theme {
+namespace chiroptera::theme {
 
   class HookRunner;
 
@@ -50,7 +50,7 @@ namespace noctalia::theme {
       std::string defaultMode;
       std::string imagePath;
       std::string schemeType;
-      // Built-in templates Noctalia has applied and that are no longer enabled: their
+      // Built-in templates Chiroptera has applied and that are no longer enabled: their
       // undo hooks run before this request's templates.
       std::vector<std::string> undoBuiltinIds;
       std::uint64_t generation = 0;
@@ -59,7 +59,7 @@ namespace noctalia::theme {
     [[nodiscard]] bool reapplyLast() const;
     [[nodiscard]] ApplyRequest makeRequest(const GeneratedPalette& palette, std::string_view defaultMode) const;
     [[nodiscard]] static bool sameInputs(const ApplyRequest& a, const ApplyRequest& b);
-    // Diffs the enabled built-in template ids against the ids Noctalia has applied (persisted
+    // Diffs the enabled built-in template ids against the ids Chiroptera has applied (persisted
     // in state.toml) and returns the ids that still owe an undo. Main thread only.
     [[nodiscard]] std::vector<std::string> syncAppliedBuiltinIds(const ThemeConfig::TemplatesConfig& templates) const;
     // Clears ids whose undo hook has run from the applied/owed sets. Main thread only.
@@ -92,4 +92,4 @@ namespace noctalia::theme {
     mutable std::unique_ptr<HookRunner> m_hookRunner;
   };
 
-} // namespace noctalia::theme
+} // namespace chiroptera::theme
