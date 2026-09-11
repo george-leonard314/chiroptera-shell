@@ -124,7 +124,7 @@ discussion, join the community on [Discord](https://discord.noctalia.dev).
 
 ## Credits
 
-Thank you to the [contributors](https://github.com/george-leonard314/chiroptera-shell/graphs/contributors) and community
+Thank you to the [contributors](https://github.com/noctalia-dev/noctalia/graphs/contributors) and community
 members who test Chiroptera, report issues, share configurations, and help shape the project.
 
 ## Donations
