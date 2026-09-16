@@ -24,6 +24,7 @@
 #include <fcntl.h>
 #include <print>
 #include <string>
+#include <string_view>
 #include <unistd.h>
 
 #ifdef __GLIBC__
@@ -240,6 +241,39 @@ namespace {
     return 0;
   }
 
+  bool isBuiltinCommand(std::string_view name) {
+    for (const auto& cmd : chiroptera::cli::kRootSubcommands) {
+      if (cmd.name == name)
+        return true;
+    }
+    return false;
+  }
+
+  // `chiroptera foo args...` runs `chiroptera-foo args...` from PATH, the way
+  // git finds its external commands, so ChiropteraOS tools sit under one name.
+  // Returns -1 when there is no such command, 126 when it could not be run.
+  int execExternalCommand(char** args) {
+    const std::string_view name = args[0];
+    if (name.empty() || name.front() == '-')
+      return -1;
+    for (const char c : name) {
+      const bool ok = (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_';
+      if (!ok)
+        return -1;
+    }
+    std::string program = "chiroptera-";
+    program += name;
+    args[0] = program.data();
+    ::execvp(program.c_str(), args);
+    const int err = errno;
+    if (err == ENOENT) {
+      args[0] = const_cast<char*>(name.data());
+      return -1;
+    }
+    std::println(stderr, "error: failed to run {}: {}", program, std::strerror(err));
+    return 126;
+  }
+
 } // namespace
 
 #ifdef CHIROPTERA_USE_JEMALLOC
@@ -256,6 +290,13 @@ int main(int argc, char* argv[]) {
 
   std::setlocale(LC_ALL, "");
   std::setlocale(LC_NUMERIC, "C");
+
+  // Before --daemon is stripped and flags are scanned, so an external command
+  // gets its arguments untouched
+  if (argc >= 2 && !isBuiltinCommand(argv[1])) {
+    if (const int rc = execExternalCommand(argv + 1); rc >= 0)
+      return rc;
+  }
 
   const bool isDaemonChild = takeDaemonPipeFromEnv();
   bool shouldDaemonize = false;

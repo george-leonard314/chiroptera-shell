@@ -43,6 +43,8 @@ namespace chiroptera::cli {
       "chiroptera",
       "A sleek, customizable desktop shell crafted for Wayland",
       {},
+      "Any other command runs chiroptera-<command> from PATH, e.g.\n"
+      "  chiroptera toggle ...  runs  chiroptera-toggle ...\n\n"
       "For more information and documentation, visit:\n  https://noctalia.dev",
       kRootFlags,
       {},
