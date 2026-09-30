@@ -10,6 +10,9 @@ const chiroptera::bar::WidgetDefinition<BrightnessWidget::Options>& brightnessWi
           field<&Options::showLabel>({
               .key = "show_label",
           }),
+          field<&Options::showWhenUnavailable>({
+              .key = "show_when_unavailable",
+          }),
       },
   };
   return definition;

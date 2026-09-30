@@ -18,9 +18,13 @@ boolean immediately to say whether the work was accepted, then deliver results t
 | `chiroptera.setUpdateInterval(ms)` | nothing | Sets how often this entry's `update()` function runs. Values below 16 ms are clamped. |
 | `chiroptera.log(msg)` | nothing | Writes a message to Chiroptera's log with this plugin's script context. |
 | `chiroptera.isDarkMode()` | bool | Returns whether the palette Chiroptera renders with is dark, so it tracks [`[theme].shell_mode`](/chiroptera/theming/#shell_mode) when that is pinned. |
+| `chiroptera.getColor(role)` | hex string or `nil` | Returns the active theme palette's `#RRGGBB` hex color for a role name (for example `"primary"`, `"surface"`, `"on_surface"`). Returns `nil` for unknown role names. Requires <PluginApiBadge feature="get-color" />. |
 | `chiroptera.getSetting(path)` | config value or `nil` | Reads any effective shell config value by TOML dotted path. Tables and arrays become Luau tables; array indices in paths are zero-based. Missing paths log a warning and return `nil`. Requires <PluginApiBadge feature="get-setting" />. |
 | `chiroptera.focusedOutputName()` | string or `nil` | Returns the focused output's connector name, falling back to the preferred interactive output when needed. |
 | `chiroptera.getConfig(key)` | setting value or `nil` | Reads a declared plugin or entry setting. Undeclared keys log a warning and return `nil`. |
+
+`getColor(role)` reads a color role from Chiroptera's current [palette](/chiroptera/theming/palette/). For example,
+`chiroptera.getColor("primary")` returns the primary accent color as `#RRGGBB`.
 
 `getConfig(key)` reads the calling plugin entry's declared settings. `getSetting(path)` instead reads the shell's
 effective configuration. For example, `chiroptera.getSetting("shell.offline_mode")` returns a boolean,

@@ -1,7 +1,9 @@
 #include "core/process/process.h"
 #include "core/toml.h"
+#include "render/core/color.h"
 #include "scripting/luau_host.h"
 #include "scripting/script_api_context.h"
+#include "ui/palette.h"
 
 #include <chrono>
 #include <condition_variable>
@@ -52,6 +54,12 @@ assert(chiroptera.runAsync(
 assert(chiroptera.getSetting("shell.offline_mode"))
 assert(chiroptera.wallpaperPath("DP-1") == "/tmp/wallpaper.png")
 assert(chiroptera.wallpaperPath("missing") == nil)
+assert(type(chiroptera.getColor("primary")) == "string")
+assert(string.len(chiroptera.getColor("primary")) == 7)
+assert(string.sub(chiroptera.getColor("primary"), 1, 1) == "#")
+assert(chiroptera.getColor("surface") ~= nil)
+assert(chiroptera.getColor("on_surface") ~= nil)
+assert(chiroptera.getColor("missing_role") == nil)
 chiroptera.setWallpaperMask("DP-1", {
   path = "/tmp/mask.png",
   wallpaperPath = "/tmp/wallpaper.png",
@@ -83,5 +91,27 @@ chiroptera.setWallpaperMask("DP-1", nil)
            "result callback should receive the completed process"
        )
       && ok;
+
+  // getColor tracks active palette updates and returns nil for unknown roles
+  const Palette originalPalette = palette;
+  Palette testPalette = originalPalette;
+  testPalette.primary = rgba(1.0F, 0.0F, 0.0F, 1.0F);
+  setPalette(testPalette);
+  ok = expect(
+           host.exec("=get-color", "assert(chiroptera.getColor('primary') == '#FF0000')\n"),
+           "getColor should return updated color from active palette"
+       )
+      && ok;
+  setPalette(originalPalette);
+  ok = expect(
+           host.exec(
+               "=get-color-restored",
+               "assert(chiroptera.getColor('primary') ~= '#FF0000')\n"
+               "assert(chiroptera.getColor('invalid_role') == nil)\n"
+           ),
+           "getColor should track restored palette and return nil for invalid roles"
+       )
+      && ok;
+
   return ok ? 0 : 1;
 }

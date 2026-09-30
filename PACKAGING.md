@@ -1,7 +1,7 @@
 # Packaging Chiroptera
 
 Notes for distribution packagers. End-user install docs live in the
-[README](README.md) and at [docs.noctalia.dev](https://docs.noctalia.dev/chiroptera/getting-started/installation/).
+[README](README.md) and at [docs.noctalia.dev](https://docs.noctalia.dev/noctalia/getting-started/installation/).
 
 ## Package description
 
@@ -24,11 +24,10 @@ v5 is already packaged for:
 - openSUSE
 - KaOS
 - Gentoo
-- Void Linux
 - GNU Guix
 - Debian (including Ubuntu)
 
-[Repology](https://repology.org/project/chiroptera/versions) is a useful at-a-glance
+[Repology](https://repology.org/project/noctalia/versions) is a useful at-a-glance
 check, but it only covers repositories it indexes (and may still list v4 as
 `chiroptera-shell`). It is not a complete inventory of community packaging.
 
@@ -166,6 +165,7 @@ Each carries its own license file beside the code.
 | `upower` | Optional: battery / power devices |
 | `ddcutil` | Optional: external monitor brightness |
 | Secret Service provider | Optional but recommended for credential / encrypted-state persistence (GNOME Keyring, KWallet, KeePassXC, ...). `libsecret` is only the client library; without a session provider those features cannot persist secrets. |
+| `sound-theme-freedesktop` | Shell sounds |
 
 ## Startup and IPC
 
@@ -207,12 +207,12 @@ Override bases with `CHIROPTERA_CONFIG_HOME`, `CHIROPTERA_STATE_HOME`,
   [noctalia-greeter](https://github.com/noctalia-dev/noctalia-greeter).
 - Not a replacement for file managers, screen casting, or drive mounting.
 - Compositor support varies (protocols / IPC). See the compositor docs for
-  [Niri](https://docs.noctalia.dev/chiroptera/compositor-settings/niri/),
-  [Hyprland](https://docs.noctalia.dev/chiroptera/compositor-settings/hyprland/),
-  [Sway / Scroll](https://docs.noctalia.dev/chiroptera/compositor-settings/sway-scroll/),
-  [Mango](https://docs.noctalia.dev/chiroptera/compositor-settings/mango/),
-  [Labwc](https://docs.noctalia.dev/chiroptera/compositor-settings/labwc/), and
-  [KDE Plasma](https://docs.noctalia.dev/chiroptera/compositor-settings/kde/).
+  [Niri](https://docs.noctalia.dev/noctalia/compositor-settings/niri/),
+  [Hyprland](https://docs.noctalia.dev/noctalia/compositor-settings/hyprland/),
+  [Sway / Scroll](https://docs.noctalia.dev/noctalia/compositor-settings/sway-scroll/),
+  [Mango](https://docs.noctalia.dev/noctalia/compositor-settings/mango/),
+  [Labwc](https://docs.noctalia.dev/noctalia/compositor-settings/labwc/), and
+  [KDE Plasma](https://docs.noctalia.dev/noctalia/compositor-settings/kde/).
 
 ## Versioning
 

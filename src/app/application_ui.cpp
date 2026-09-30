@@ -42,6 +42,7 @@
 #include "launcher/dmenu_provider.h"
 #include "launcher/emoji_provider.h"
 #include "launcher/math_provider.h"
+#include "launcher/panel_provider.h"
 #include "launcher/plugin_launcher_provider.h"
 #include "launcher/session_provider.h"
 #include "launcher/wallpaper_provider.h"
@@ -106,6 +107,15 @@
 
 namespace {
   constexpr Logger kLog("app");
+
+  [[nodiscard]] bool overviewTypeToLaunchEnabled(const ConfigService& configService) {
+    if (compositors::isUmbriel()) {
+      return configService.config().shell.umbrielOverviewTypeToLaunchEnabled;
+    } else if (compositors::isNiri()) {
+      return configService.config().shell.niriOverviewTypeToLaunchEnabled;
+    }
+    return false;
+  }
 } // namespace
 
 void Application::initUi() {
@@ -338,6 +348,9 @@ void Application::initLockScreenAndSession() {
         if (m_logindService != nullptr) {
           m_logindService->setSessionLockedHint(true);
         }
+        if (m_screenSaverService != nullptr) {
+          m_screenSaverService->emitActiveChanged(true);
+        }
         releaseSleepDelayInhibitIfPending();
       },
       [this]() {
@@ -350,6 +363,9 @@ void Application::initLockScreenAndSession() {
         requestAllSurfacesRedraw();
         if (m_logindService != nullptr) {
           m_logindService->setSessionLockedHint(false);
+        }
+        if (m_screenSaverService != nullptr) {
+          m_screenSaverService->emitActiveChanged(false);
         }
       },
       [this]() {
@@ -572,49 +588,51 @@ void Application::initPanelManagerAndPanels() {
   syncClipboardService();
   m_panelManager.registerPanel("session", std::make_unique<SessionPanel>(&m_configService, m_sessionActionRunner));
   m_panelManager.registerPanel("test", std::make_unique<TestPanel>());
-  m_panelManager.registerPanel(
-      "control-center",
-      std::make_unique<ControlCenterPanel>(ControlCenterServices{
-          .notifications = &m_notificationManager,
-          .audio = m_pipewireService.get(),
-          .easyEffects = m_easyEffectsService.get(),
-          .mpris = m_mprisService.get(),
-          .config = &m_configService,
-          .httpClient = &m_httpClient,
-          .weather = &m_weatherService,
-          .spectrum = m_pipewireSpectrum.get(),
-          .upower = m_upowerService.get(),
-          .powerProfiles = m_powerProfilesService.get(),
-          .network = m_networkService.get(),
-          .modem = m_modemManagerService.get(),
-          .networkSecrets = m_networkSecretAgent.get(),
-          .externalIp = &m_externalIpService,
-          .bluetooth = m_bluetoothService.get(),
-          .bluetoothAgent = m_bluetoothAgent.get(),
-          .brightness = m_brightnessService.get(),
-          .sysmon = m_systemMonitor.get(),
-          .screenTime = &m_screenTimeService,
-          .nightLight = &m_gammaService,
-          .theme = &m_themeService,
-          .idleInhibitor = &m_idleInhibitor,
-          .dependencies = &m_dependencyService,
-          .platform = &m_compositorPlatform,
-          .ipc = &m_ipcService,
-          .wallpaper = &m_wallpaper,
-          .calendar = &m_calendarService,
-          .scriptApi = &m_scriptApi,
-          .fileWatcher = &m_fileWatcher,
-          .clipboard = &m_clipboardService,
-          .accounts = m_accountsService.get(),
-          .thumbnails = &m_thumbnailService,
-          .asyncTextures = &m_asyncTextureCache,
-      })
-  );
+  auto controlCenterPanel = std::make_unique<ControlCenterPanel>(ControlCenterServices{
+      .notifications = &m_notificationManager,
+      .audio = m_pipewireService.get(),
+      .easyEffects = m_easyEffectsService.get(),
+      .mpris = m_mprisService.get(),
+      .config = &m_configService,
+      .httpClient = &m_httpClient,
+      .weather = &m_weatherService,
+      .spectrum = m_pipewireSpectrum.get(),
+      .upower = m_upowerService.get(),
+      .powerProfiles = m_powerProfilesService.get(),
+      .network = m_networkService.get(),
+      .modem = m_modemManagerService.get(),
+      .networkSecrets = m_networkSecretAgent.get(),
+      .externalIp = &m_externalIpService,
+      .bluetooth = m_bluetoothService.get(),
+      .bluetoothAgent = m_bluetoothAgent.get(),
+      .brightness = m_brightnessService.get(),
+      .sysmon = m_systemMonitor.get(),
+      .screenTime = &m_screenTimeService,
+      .nightLight = &m_gammaService,
+      .theme = &m_themeService,
+      .idleInhibitor = &m_idleInhibitor,
+      .dependencies = &m_dependencyService,
+      .platform = &m_compositorPlatform,
+      .ipc = &m_ipcService,
+      .wallpaper = &m_wallpaper,
+      .calendar = &m_calendarService,
+      .scriptApi = &m_scriptApi,
+      .fileWatcher = &m_fileWatcher,
+      .clipboard = &m_clipboardService,
+      .accounts = m_accountsService.get(),
+      .thumbnails = &m_thumbnailService,
+      .asyncTextures = &m_asyncTextureCache,
+  });
+  ControlCenterPanel* controlCenterPanelPtr = controlCenterPanel.get();
+  m_panelManager.registerPanel("control-center", std::move(controlCenterPanel));
   {
     auto launcherPanel = std::make_unique<LauncherPanel>(&m_configService, &m_asyncTextureCache);
     launcherPanel->addProvider(std::make_unique<AppProvider>(&m_configService, &m_compositorPlatform));
     launcherPanel->addProvider(std::make_unique<WallpaperProvider>(&m_configService, &m_wayland, &m_themeService));
     launcherPanel->addProvider(std::make_unique<WindowProvider>(&m_compositorPlatform));
+    launcherPanel->addProvider(
+        std::make_unique<PanelProvider>(&m_panelManager, controlCenterPanelPtr, &m_configService)
+    );
     launcherPanel->addProvider(std::make_unique<SessionProvider>(&m_configService, &m_sessionActionRunner));
     launcherPanel->addProvider(std::make_unique<MathProvider>(&m_clipboardService, &m_configService, &m_httpClient));
     launcherPanel->addProvider(std::make_unique<EmojiProvider>(&m_clipboardService));
@@ -662,7 +680,7 @@ void Application::initPanelManagerAndPanels() {
   reloadDmenuProviders();
   reloadPluginPanels();
   m_overviewLauncherCapture.initialize(m_wayland, &m_renderContext, m_compositorPlatform, m_panelManager);
-  m_overviewLauncherCapture.setEnabled(m_configService.config().shell.niriOverviewTypeToLaunchEnabled);
+  m_overviewLauncherCapture.setEnabled(overviewTypeToLaunchEnabled(m_configService));
   m_overviewLauncherCapture.setOpenLauncherCallback(
       [this](std::string_view initialQuery, wl_output* output, std::string_view sourceBarName) {
         if (m_panelManager.isOpenPanel("launcher")) {
@@ -694,7 +712,7 @@ void Application::initPanelManagerAndPanels() {
     m_bar.refresh();
   });
   m_configService.addReloadCallback([this]() {
-    m_overviewLauncherCapture.setEnabled(m_configService.config().shell.niriOverviewTypeToLaunchEnabled);
+    m_overviewLauncherCapture.setEnabled(overviewTypeToLaunchEnabled(m_configService));
   });
   m_overviewLauncherCapture.sync();
   m_panelManager.registerPanel(
@@ -740,6 +758,7 @@ void Application::initNotificationAndOsd() {
   m_windowSwitcher.initialize(
       m_wayland, &m_renderContext, m_compositorPlatform, &m_configService, &m_asyncTextureCache
   );
+  m_configService.addReloadCallback([this]() { m_windowSwitcher.onConfigReload(); });
   m_configService.addReloadCallback([this]() { m_osdOverlay.onConfigReload(); });
   m_idleGraceOverlay.initialize(m_wayland, &m_renderContext);
   m_wayland.setIdleCapabilitiesReadyCallback([this]() { m_idleManager.reload(m_configService.config().idle); });
@@ -750,22 +769,27 @@ void Application::initNotificationAndOsd() {
           std::function<void()> onFadeComplete
       ) {
         (void)behaviorName;
-        // Snapshot the clean desktop before the overlay fades in
-        if (willLockSession && m_configService.isLockScreenEnabled()) {
+        (void)willLockSession;
+        const std::uint64_t generation = ++m_idleGraceOverlayGeneration;
+        // Snapshot before the overlay fades in. A lock behavior can join an
+        // already-active grace period after this callback has run.
+        if (m_configService.isLockScreenEnabled()) {
           m_lockScreen.primeDesktopCaptures();
         }
-        DeferredCall::callLater([this, fadeIn, done = std::move(onFadeComplete)]() mutable {
+        DeferredCall::callLater([this, generation, fadeIn, done = std::move(onFadeComplete)]() mutable {
+          if (generation != m_idleGraceOverlayGeneration) {
+            return;
+          }
           m_idleGraceOverlay.show(fadeIn, std::move(done));
         });
       },
       [this](bool userCancelled, bool willLockSession) {
+        ++m_idleGraceOverlayGeneration;
         // Keep the overlay only when handing off to Chiroptera's lock screen (avoids a flash).
         // External lockers never take ownership; deferred hide also races with suspend.
         const bool handoffToLockScreen = !userCancelled && willLockSession && m_configService.isLockScreenEnabled();
         if (!handoffToLockScreen) {
           m_idleGraceOverlay.hide();
-        }
-        if (userCancelled) {
           m_lockScreen.clearPrimedDesktopCaptures();
         }
       }
@@ -803,6 +827,7 @@ void Application::initNotificationAndOsd() {
   );
   m_audioOsd.bindOverlay(m_osdOverlay);
   m_audioOsd.setSoundPlayer(m_soundPlayer.get());
+  m_screenshotService.setSoundPlayer(m_soundPlayer.get());
   if (m_pipewireService != nullptr) {
     m_audioOsd.primeFromService(*m_pipewireService);
   }
@@ -883,8 +908,8 @@ void Application::initBarDockAndLayout() {
   m_panelManager.setAttachedPanelAvailabilityCallback([this](wl_output* output, std::string_view barName) {
     return m_bar.canAttachPanelToBar(output, barName);
   });
-  m_panelManager.setAttachedPanelLayerProvider([this](wl_output* output, std::string_view barName) {
-    return m_bar.layerForBar(output, barName);
+  m_panelManager.setBarConfigProvider([this](wl_output* output, std::string_view barName) {
+    return m_bar.configForBar(output, barName);
   });
   m_panelManager.setAttachedPanelBarSettledCallback([this](wl_output* output, std::string_view barName) {
     return m_bar.isAttachedPanelBarSettled(output, barName);

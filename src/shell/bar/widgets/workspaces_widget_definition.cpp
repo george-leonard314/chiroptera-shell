@@ -108,6 +108,13 @@ const chiroptera::bar::WidgetDefinition<WorkspacesWidget::Options>& workspacesWi
                           .visibleWhen = labelsShown(),
                       },
               }),
+              field<&Options::showTooltip>({
+                  .key = "show_tooltip",
+                  .presentation =
+                      settings::WidgetSettingPresentation{
+                          .group = "workspaces.list",
+                      },
+              }),
               field<&Options::showIcons>({
                   .key = "show_icons",
                   .presentation =

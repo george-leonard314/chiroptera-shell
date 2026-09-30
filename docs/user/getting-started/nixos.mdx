@@ -17,7 +17,7 @@ To make Chiroptera's wifi, bluetooth, power-profile, and battery feature availab
 :::
 
 ## Installation
-A Chiroptera package is available on [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&show=chiroptera). 
+A Chiroptera package is available on [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&show=noctalia). 
 
 If you'd prefer the latest git version or would like to use one of the modules, you can [add the input](#add-input) using your preferred input-pinning method and optionally use the [binary cache](#binary-cache) to avoid compiling locally.
 
@@ -308,7 +308,7 @@ When using the service, it is recommended to enable `launch_apps_as_systemd_serv
 
 ### Binary Cache {#binary-cache}
 
-Pre-built binaries are available on [Cachix](https://app.cachix.org/cache/chiroptera), so you can skip compiling locally.
+Pre-built binaries are available on [Cachix](https://app.cachix.org/cache/noctalia), so you can skip compiling locally.
 
 You can configure the substituter either in your NixOS config, flake, or `/etc/nix/nix.conf`:
 
@@ -322,7 +322,7 @@ You can add the cache either to your flake, nixos configuration, or `/etc/nix/ni
   <TabItem label="configuration.nix">
     ```nix
     nix.settings = {
-      extra-substituters = [ "https://chiroptera.cachix.org" ];
+      extra-substituters = [ "https://noctalia.cachix.org" ];
       extra-trusted-public-keys = [ "chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
     };
     ```
@@ -330,14 +330,14 @@ You can add the cache either to your flake, nixos configuration, or `/etc/nix/ni
   <TabItem label="flake.nix">
     ```nix
     nixConfig = {
-      extra-substituters = [ "https://chiroptera.cachix.org" ];
+      extra-substituters = [ "https://noctalia.cachix.org" ];
       extra-trusted-public-keys = [ "chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
     };
     ```
   </TabItem>
   <TabItem label="nix.conf">
     ```properties
-    extra-substituters = https://chiroptera.cachix.org
+    extra-substituters = https://noctalia.cachix.org
     extra-trusted-public-keys = chiroptera.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=
     ```
   </TabItem>

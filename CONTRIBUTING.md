@@ -135,7 +135,7 @@ C++ identifiers.
 
 ## Translations
 
-Chiroptera translations are managed through [Chiroptera Translate](https://i18n.noctalia.dev/projects/chiroptera). The JSON
+Chiroptera translations are managed through [Chiroptera Translate](https://i18n.noctalia.dev/projects/noctalia). The JSON
 files in `assets/translations/` are exported from that workflow, with `assets/translations/en.json` acting as the
 source catalog for new strings.
 

@@ -88,7 +88,6 @@ namespace {
     std::vector<std::string> capturedWired;
     std::vector<std::string> capturedCellular;
     int pendingOps = 0;
-    std::function<void()> onAllComplete;
   };
 
   struct SavedConnectionsState {
@@ -232,7 +231,9 @@ void NetworkManagerService::refresh() {
   pending->capturedCellular = m_savedCellularConnectionPaths;
   pending->pendingOps = 3;
 
-  pending->onAllComplete = [this, pending, lifetimeToken]() {
+  // Must stay local: `pending` must not own a callback that captures `pending`, or the refresh
+  // state cannot be freed when the completion path is skipped (e.g. lifetime expiry).
+  auto onAllComplete = [this, pending, lifetimeToken]() {
     if (lifetimeToken.expired()) {
       return;
     }
@@ -268,8 +269,6 @@ void NetworkManagerService::refresh() {
           && m_changeCallback) {
         m_changeCallback(m_state, origin);
       }
-      // Break the self-reference cycle: pending->onAllComplete captures pending.
-      pending->onAllComplete = {};
       // Async reply context: safe to drop retired activation proxies here.
       m_retiredApActivations.clear();
 
@@ -281,12 +280,12 @@ void NetworkManagerService::refresh() {
     });
   };
 
-  auto onOpComplete = [pending, lifetimeToken]() {
+  auto onOpComplete = [pending, lifetimeToken, onAllComplete]() {
     if (lifetimeToken.expired()) {
       return;
     }
     if (--pending->pendingOps == 0) {
-      pending->onAllComplete();
+      onAllComplete();
     }
   };
 
@@ -362,7 +361,7 @@ bool NetworkManagerService::activateAccessPoint(const AccessPointInfo& ap) {
             }
             if (err.has_value()) {
               kLog.debug("ActivateConnection(/) failed for ssid={}: {}; trying AddAndActivate", ap.ssid, err->what());
-              if (!ap.secured) {
+              if (!ap.requiresCredentials()) {
                 addAndActivateAccessPoint(ap, std::nullopt);
               } else {
                 m_emitOnNextRefresh = true;
@@ -380,7 +379,7 @@ bool NetworkManagerService::activateAccessPoint(const AccessPointInfo& ap) {
     }
   }
 
-  if (ap.secured) {
+  if (ap.requiresCredentials()) {
     return false;
   }
   return addAndActivateAccessPoint(ap, std::nullopt);
@@ -393,7 +392,7 @@ bool NetworkManagerService::activateAccessPoint(const AccessPointInfo& ap, const
   if (ap.active) {
     return true;
   }
-  if (ap.secured && psk.empty()) {
+  if (ap.requiresCredentials() && psk.empty()) {
     return false;
   }
   // An 802.1X AP has no pre-shared key to accept. Falling through would build a
@@ -438,9 +437,10 @@ bool NetworkManagerService::addAndActivateAccessPoint(
   ConnectionSettings settings;
   if (ap.secured) {
     // Minimal secured-wifi settings — NM fills in ssid from the specific_object.
+    // OWE uses key-mgmt owe with no psk (Enhanced Open is passwordless).
     settings["802-11-wireless-security"]["key-mgmt"] =
         sdbus::Variant{std::string(network_manager_security::keyManagementName(ap.keyManagement))};
-    if (psk.has_value()) {
+    if (psk.has_value() && ap.keyManagement != network_manager_security::KeyManagement::Owe) {
       settings["802-11-wireless-security"]["psk"] = sdbus::Variant{*psk};
     }
     if (credentials.has_value()) {

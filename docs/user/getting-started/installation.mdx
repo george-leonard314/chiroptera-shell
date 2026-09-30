@@ -14,7 +14,6 @@ Chiroptera is available on the following distributions. Choose your platform bel
 - [Fedora](#fedora)
 - [openSUSE](#opensuse)
 - [Gentoo](#gentoo)
-- [Void Linux](#void)
 - [GNU Guix](#guix)
 - [Debian](#debian) (including Ubuntu)
 
@@ -69,19 +68,19 @@ sudo dnf install chiroptera-git
 
 ## openSUSE {#opensuse}
 
-Chiroptera is available via [home:neifua:Chiroptera](https://build.opensuse.org/package/show/home:neifua:Chiroptera/chiroptera-git) repository on the openSUSE Build Service.
+Chiroptera is available via [home:neifua:Chiroptera](https://build.opensuse.org/package/show/home:neifua:Noctalia/noctalia-git) repository on the openSUSE Build Service.
 
 **Step 1**: Add the OBS repository
 
 <Tabs>
   <TabItem label="Tumbleweed">
     ```bash
-	sudo zypper addrepo --refresh --name chiroptera-v5 https://download.opensuse.org/repositories/home:neifua:Chiroptera/openSUSE_Tumbleweed/home:neifua:Chiroptera.repo
+	sudo zypper addrepo --refresh --name chiroptera-v5 https://download.opensuse.org/repositories/home:neifua:Noctalia/openSUSE_Tumbleweed/home:neifua:Noctalia.repo
     ```
   </TabItem>
   <TabItem label="Slowroll">
     ```bash
-	sudo zypper addrepo --refresh --name chiroptera-v5 https://download.opensuse.org/repositories/home:neifua:Chiroptera/openSUSE_Slowroll/home:neifua:Chiroptera.repo
+	sudo zypper addrepo --refresh --name chiroptera-v5 https://download.opensuse.org/repositories/home:neifua:Noctalia/openSUSE_Slowroll/home:neifua:Noctalia.repo
     ```
   </TabItem>
 </Tabs>
@@ -107,8 +106,8 @@ Chiroptera is available via [home:neifua:Chiroptera](https://build.opensuse.org/
 :::note
 v5 will only be available for **Tumbleweed** and **Slowroll**. **Leap 16.0** is unable to build because *sdbus-c++* is still on v1.6.0 while v5 requires >= v2.x.x
 
-- **[Stable version](https://build.opensuse.org/package/show/home:neifua:Chiroptera/chiroptera)**: Updated when a new release is tagged
-- **[Unstable version](https://build.opensuse.org/package/show/home:neifua:Chiroptera/chiroptera-git)**: Automatically rebuilt on OBS whenever a new commit is pushed
+- **[Stable version](https://build.opensuse.org/package/show/home:neifua:Noctalia/noctalia)**: Updated when a new release is tagged
+- **[Unstable version](https://build.opensuse.org/package/show/home:neifua:Noctalia/noctalia-git)**: Automatically rebuilt on OBS whenever a new commit is pushed
 :::
 
 ---
@@ -117,76 +116,18 @@ v5 will only be available for **Tumbleweed** and **Slowroll**. **Leap 16.0** is 
 
 Chiroptera is available in the [GURU](https://wiki.gentoo.org/wiki/Project:GURU) overlay.
 
-:::note[Gentoo exception]
-Gentoo packaging does not provide [SLOTs](https://wiki.gentoo.org/wiki/SLOT) for v4 and v5 as v4 will be dropped eventually, therefore they cannot be installed simultaneously.
-
-Snapshots have been dropped in favor of official releases, so`=gui-apps/chiroptera-5.0.0_pre99999999` is now superseded by `=gui-apps/chiroptera-9999`.
-
-:::
-
 **Step 1**: Enable and sync the overlay as read in [Project:GURU/Information_for_End_Users](https://wiki.gentoo.org/wiki/Project:GURU/Information_for_End_Users).
 
 **Step 2**: [Unmask](https://wiki.gentoo.org/wiki/Live_ebuilds#Unmasking_live_ebuilds) the `gui-apps/chiroptera` package:
 
 ```
-gui-apps/chiroptera **
+gui-apps/chiroptera ~amd64
 ```
 
-**Step 3**: (Optional) [Mask](https://wiki.gentoo.org/wiki/Knowledge_Base:Masking_a_package#Masking_a_specific_package_version) the live ebuild to use versioned releases
-
-```
-<=gui-apps/chiroptera-9999
-```
-
-**Step 4**: Emerge the package:
+**Step 3**: Emerge the package:
 
 ```bash
 emerge --ask gui-apps/chiroptera
-```
-
----
-
-## Void Linux {#void}
-
-Chiroptera is available through a custom XBPS repository.
-
-**Step 1**: Add the repository source
-
-```bash
-echo "repository=https://repo.voiders.dev" | sudo tee /etc/xbps.d/10-voiders-community.conf
-```
-
-**Step 2**: Sync and install Chiroptera
-
-```bash
-sudo xbps-install -S
-sudo xbps-install chiroptera
-```
-
-:::note
-If Chiroptera fails to run, install the `sdbus-c++` package.
-:::
-
-### Alternative: Build from source using xbps-src
-
-```
-# Install git, wget
-sudo xbps-install git wget
-
-# Set up the Void packages tree
-git clone --depth 1 https://github.com/void-linux/void-packages.git
-cd void-packages
-./xbps-src binary-bootstrap
-
-# Copy Chiroptera build templates
-mkdir srcpkgs/chiroptera
-wget https://git.voiders.dev/voiders-community/repository/raw/branch/main/pkgs/chiroptera/template -P srcpkgs/chiroptera/
-
-# Build the packages
-./xbps-src pkg chiroptera
-
-# Install the built packages
-sudo xbps-install --repository=hostdir/binpkgs chiroptera
 ```
 
 ---
@@ -269,17 +210,17 @@ wget https://pkg.noctalia.dev/deb/nickh-archive-keyring.deb && sudo dpkg -i nick
 <Tabs>
   <TabItem label="Debian Trixie">
     ```bash
-    sudo wget -O /etc/apt/sources.list.d/chiroptera-trixie.sources https://pkg.noctalia.dev/deb/chiroptera-trixie.sources
+    sudo wget -O /etc/apt/sources.list.d/chiroptera-trixie.sources https://pkg.noctalia.dev/deb/noctalia-trixie.sources
     ```
   </TabItem>
   <TabItem label="Debian Sid">
     ```bash
-    sudo wget -O /etc/apt/sources.list.d/chiroptera-unstable.sources https://pkg.noctalia.dev/deb/chiroptera-unstable.sources
+    sudo wget -O /etc/apt/sources.list.d/chiroptera-unstable.sources https://pkg.noctalia.dev/deb/noctalia-unstable.sources
     ```
   </TabItem>
   <TabItem label="Ubuntu 26.04">
     ```bash
-    sudo wget -O /etc/apt/sources.list.d/chiroptera-resolute.sources https://pkg.noctalia.dev/deb/chiroptera-resolute.sources
+    sudo wget -O /etc/apt/sources.list.d/chiroptera-resolute.sources https://pkg.noctalia.dev/deb/noctalia-resolute.sources
     ```
   </TabItem>
 </Tabs>
@@ -313,12 +254,12 @@ If not currently using `greetd`
 First stop and disable your current display manager. Eg:
 
 ```bash
-sudo systmectl disable --now gdm3
+sudo systemctl disable --now gdm3
 ```
 Then enable and start `greetd`. Eg:
 
 ```bash
-sudo systmectl enable --now greetd
+sudo systemctl enable --now greetd
 ```
 </li>
 </ol>

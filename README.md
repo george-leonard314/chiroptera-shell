@@ -24,13 +24,13 @@ are designed as one cohesive shell instead of a collection of unrelated panels a
 <p><br/></p>
 
 <p align="center">
-  <img src="https://assets.noctalia.dev/chiroptera-logo.svg?v=2" alt="Chiroptera Logo" style="width: 192px" />
+  <img src="https://assets.noctalia.dev/noctalia-logo.svg?v=2" alt="Chiroptera Logo" style="width: 192px" />
 </p>
 
 <p align="center">
-  <a href="https://docs.noctalia.dev/chiroptera/getting-started/installation/">
+  <a href="https://docs.noctalia.dev/noctalia/getting-started/installation/">
     <img
-      src="https://img.shields.io/badge/Install_Chiroptera-FFF59B?style=for-the-badge&labelColor=FFF59B"
+      src="https://img.shields.io/badge/Install_Noctalia-FFF59B?style=for-the-badge&labelColor=FFF59B"
       alt="Install Chiroptera"
       style="height: 50px"
     />
@@ -41,10 +41,10 @@ are designed as one cohesive shell instead of a collection of unrelated panels a
 
 <p align="center">
   <a href="https://github.com/george-leonard314/chiroptera-shell/commits">
-    <img src="https://img.shields.io/github/last-commit/noctalia-dev/chiroptera?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=git&logoColor=070722&label=commit" alt="Last commit" />
+    <img src="https://img.shields.io/github/last-commit/noctalia-dev/noctalia?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=git&logoColor=070722&label=commit" alt="Last commit" />
   </a>
   <a href="https://github.com/george-leonard314/chiroptera-shell/stargazers">
-    <img src="https://img.shields.io/github/stars/noctalia-dev/chiroptera?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=github&logoColor=070722" alt="GitHub stars" />
+    <img src="https://img.shields.io/github/stars/noctalia-dev/noctalia?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=github&logoColor=070722" alt="GitHub stars" />
   </a>
   <a href="https://docs.noctalia.dev">
     <img src="https://img.shields.io/badge/docs-FFF59B?style=for-the-badge&logo=gitbook&logoColor=070722&labelColor=FFF59B" alt="Documentation" />
@@ -93,15 +93,19 @@ Chiroptera is a desktop shell, not a full desktop environment. It provides the v
 Wayland compositor: bars, panels, launcher, notifications, dock, lock screen, idle behavior, OSDs, theming, wallpapers,
 desktop widgets, and multi-monitor shell surfaces.
 
-Window management, tiling, file management, removable-drive mounting, printers management and screen mirroring/casting
-belong to the compositor, dedicated desktop applications, or system services.
+Window management, tiling, compositor configuration such as monitor arrangement and positions, file management,
+removable-drive mounting, printers management, and screen mirroring/casting belong to the compositor, dedicated desktop
+applications, or system services.
 
 Display/login greeter support lives in the separate [Chiroptera Greeter](https://github.com/noctalia-dev/noctalia-greeter)
 project. Chiroptera may integrate with those pieces when useful, but it does not replace them.
 
+Core Chiroptera is non-invasive: it does not manage your compositor settings or take over your dotfiles. Compositor-specific
+controls can be provided as opt-in plugins rather than becoming core shell behavior.
+
 The plugin system is available for user-installed extensions. Features that are useful to some users but not essential
 to the core shell can live there: extra bar widgets, launcher providers, desktop widgets, panels, shortcuts, background
-services, compositor-specific extras, hardware-specific controls, and third-party service integrations.
+services, compositor-specific extras and controls, hardware-specific controls, and third-party service integrations.
 
 ## Build from source
 
@@ -111,7 +115,7 @@ Source dependencies, distro-specific package commands, build modes, and install 
 ## Configuration
 
 A ready-to-use starting config with all defaults is at [example.toml](example.toml). The full configuration reference
-lives in the [documentation site](https://docs.noctalia.dev/chiroptera/). The source MDX files are in
+lives in the [documentation site](https://docs.noctalia.dev/noctalia/). The source MDX files are in
 [`docs/user/`](docs/user/); sync them to a local docs checkout with `tools/sync-docs.sh`.
 
 ## Contributing
@@ -132,10 +136,10 @@ members who test Chiroptera, report issues, share configurations, and help shape
 Donations are appreciated but completely optional.
 
 <p>
-  <a href="https://www.buymeacoffee.com/chiroptera">
+  <a href="https://www.buymeacoffee.com/noctalia">
     <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFF59B?style=for-the-badge&logo=buymeacoffee&logoColor=070722&labelColor=FFF59B" alt="Buy Me a Coffee">
   </a>
-  <a href="https://ko-fi.com/chiropteradev">
+  <a href="https://ko-fi.com/noctaliadev">
     <img src="https://img.shields.io/badge/Ko--fi-FFF59B?style=for-the-badge&logo=kofi&logoColor=070722&labelColor=FFF59B" alt="Ko-fi">
   </a>
 </p>
