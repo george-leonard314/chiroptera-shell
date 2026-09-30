@@ -4,4 +4,4 @@
 
 #include <variant>
 
-[[nodiscard]] const noctalia::bar::WidgetDefinition<std::monostate>& testWidgetDefinition();
+[[nodiscard]] const chiroptera::bar::WidgetDefinition<std::monostate>& testWidgetDefinition();

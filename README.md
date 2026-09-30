@@ -1,6 +1,19 @@
-# Noctalia
+<!-- chiroptera-banner -->
+# Chiroptera Shell
 
-Noctalia is a native Wayland desktop shell for people who want a polished, configurable Linux desktop without stitching
+The desktop shell of ChiropteraOS. A rebrand of Noctalia by the Noctalia team and contributors, MIT licensed: <!-- keep -->
+https://github.com/noctalia-dev/noctalia <!-- keep -->
+
+Upstream is tracked as the `upstream` git remote. `chiroptera/rename.sh` is the transform applied
+after each upstream merge; `chiroptera/check-rename.sh` verifies it. Plugins written for Noctalia <!-- keep -->
+keep working: the Luau API is registered as `chiroptera` with `noctalia` as an alias. <!-- keep -->
+The rest of this README is the upstream documentation with names rewritten.
+
+---
+
+# Chiroptera
+
+Chiroptera is a native Wayland desktop shell for people who want a polished, configurable Linux desktop without stitching
 together a separate bar, launcher, notification daemon, lock screen, wallpaper tool, and settings UI.
 
 It provides the shell layer around your compositor: bars, widgets, dock, launcher, control center, notifications,
@@ -11,14 +24,14 @@ are designed as one cohesive shell instead of a collection of unrelated panels a
 <p><br/></p>
 
 <p align="center">
-  <img src="https://assets.noctalia.dev/noctalia-logo.svg?v=2" alt="Noctalia Logo" style="width: 192px" />
+  <img src="https://assets.noctalia.dev/noctalia-logo.svg?v=2" alt="Chiroptera Logo" style="width: 192px" />
 </p>
 
 <p align="center">
   <a href="https://docs.noctalia.dev/noctalia/getting-started/installation/">
     <img
       src="https://img.shields.io/badge/Install_Noctalia-FFF59B?style=for-the-badge&labelColor=FFF59B"
-      alt="Install Noctalia"
+      alt="Install Chiroptera"
       style="height: 50px"
     />
   </a>
@@ -27,10 +40,10 @@ are designed as one cohesive shell instead of a collection of unrelated panels a
 <p><br/></p>
 
 <p align="center">
-  <a href="https://github.com/noctalia-dev/noctalia/commits">
+  <a href="https://github.com/george-leonard314/chiroptera-shell/commits">
     <img src="https://img.shields.io/github/last-commit/noctalia-dev/noctalia?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=git&logoColor=070722&label=commit" alt="Last commit" />
   </a>
-  <a href="https://github.com/noctalia-dev/noctalia/stargazers">
+  <a href="https://github.com/george-leonard314/chiroptera-shell/stargazers">
     <img src="https://img.shields.io/github/stars/noctalia-dev/noctalia?style=for-the-badge&labelColor=FFF59B&color=FFF59B&logo=github&logoColor=070722" alt="GitHub stars" />
   </a>
   <a href="https://docs.noctalia.dev">
@@ -41,13 +54,13 @@ are designed as one cohesive shell instead of a collection of unrelated panels a
   </a>
 </p>
 
-## Why Noctalia?
+## Why Chiroptera?
 
 Most Wayland setups leave the desktop shell to a stack of small tools: one bar, another launcher, another notification
 daemon, a lock screen, a wallpaper daemon, scripts for session actions, and separate config formats for each piece. That
 can be flexible, but it also makes a complete desktop feel fragile and hard to keep visually consistent.
 
-Noctalia solves that by providing one configurable shell layer that owns the common desktop surfaces and services while
+Chiroptera solves that by providing one configurable shell layer that owns the common desktop surfaces and services while
 still fitting into compositor-driven Wayland workflows. It is meant for users who want the control of a custom desktop
 environment with fewer moving parts and a consistent UI.
 
@@ -66,17 +79,17 @@ To understand the values and philosophy guiding the project, read our [ethos](ht
 
 ## Wayland Compositor Support
 
-Noctalia supports Wayland compositors that provide the layer-shell protocols it needs for shell surfaces. Workspace
+Chiroptera supports Wayland compositors that provide the layer-shell protocols it needs for shell surfaces. Workspace
 integration works through compositor-native backends where needed, or through `ext-workspace-v1` on compositors that
 implement it.
 
 Current compositor integrations include Niri, Hyprland, Sway, Scroll, Mango, Labwc, Triad, dwl, and other compatible
-Wayland compositors. Other compositors may run Noctalia but can have reduced workspace, window, output, or
+Wayland compositors. Other compositors may run Chiroptera but can have reduced workspace, window, output, or
 session-action integration depending on the protocols and IPC they expose.
 
 ## Scope
 
-Noctalia is a desktop shell, not a full desktop environment. It provides the visual and service layer around your
+Chiroptera is a desktop shell, not a full desktop environment. It provides the visual and service layer around your
 Wayland compositor: bars, panels, launcher, notifications, dock, lock screen, idle behavior, OSDs, theming, wallpapers,
 desktop widgets, and multi-monitor shell surfaces.
 
@@ -84,10 +97,10 @@ Window management, tiling, compositor configuration such as monitor arrangement 
 removable-drive mounting, printers management, and screen mirroring/casting belong to the compositor, dedicated desktop
 applications, or system services.
 
-Display/login greeter support lives in the separate [Noctalia Greeter](https://github.com/noctalia-dev/noctalia-greeter)
-project. Noctalia may integrate with those pieces when useful, but it does not replace them.
+Display/login greeter support lives in the separate [Chiroptera Greeter](https://github.com/noctalia-dev/noctalia-greeter)
+project. Chiroptera may integrate with those pieces when useful, but it does not replace them.
 
-Core Noctalia is non-invasive: it does not manage your compositor settings or take over your dotfiles. Compositor-specific
+Core Chiroptera is non-invasive: it does not manage your compositor settings or take over your dotfiles. Compositor-specific
 controls can be provided as opt-in plugins rather than becoming core shell behavior.
 
 The plugin system is available for user-installed extensions. Features that are useful to some users but not essential
@@ -115,8 +128,8 @@ discussion, join the community on [Discord](https://discord.noctalia.dev).
 
 ## Credits
 
-Thank you to the [contributors](https://github.com/noctalia-dev/noctalia/graphs/contributors) and community
-members who test Noctalia, report issues, share configurations, and help shape the project.
+Thank you to the [contributors](https://github.com/george-leonard314/chiroptera-shell/graphs/contributors) and community
+members who test Chiroptera, report issues, share configurations, and help shape the project.
 
 ## Donations
 
@@ -143,7 +156,7 @@ Distro packaging notes (description, deps, install layout, Meson options) live i
 ## Star History
 
 <p align="center">
-  <a href="https://github.com/noctalia-dev/noctalia/stargazers">
+  <a href="https://github.com/george-leonard314/chiroptera-shell/stargazers">
     <img src="https://api.noctalia.dev/stars" alt="Star History" />
   </a>
 </p>

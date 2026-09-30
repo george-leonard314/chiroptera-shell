@@ -13,11 +13,11 @@ namespace {
 
 } // namespace
 
-const noctalia::bar::WidgetDefinition<NetworkWidget::Options>& networkWidgetDefinition() {
-  using noctalia::bar::field;
+const chiroptera::bar::WidgetDefinition<NetworkWidget::Options>& networkWidgetDefinition() {
+  using chiroptera::bar::field;
   using Options = NetworkWidget::Options;
 
-  static const noctalia::bar::WidgetDefinition<Options> definition{
+  static const chiroptera::bar::WidgetDefinition<Options> definition{
       .type = "network",
       .fields = {
           field<&Options::vpnStatusMode>({

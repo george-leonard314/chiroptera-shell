@@ -45,26 +45,26 @@ int main() {
   });
 
   constexpr auto source = R"(
-assert(not noctalia.runAsync(""))
-assert(noctalia.runAsync(
+assert(not chiroptera.runAsync(""))
+assert(chiroptera.runAsync(
   { "printf", "%s", "owner/repo; printf injected" },
   function(_) end,
   5000
 ))
-assert(noctalia.getSetting("shell.offline_mode"))
-assert(noctalia.wallpaperPath("DP-1") == "/tmp/wallpaper.png")
-assert(noctalia.wallpaperPath("missing") == nil)
-assert(type(noctalia.getColor("primary")) == "string")
-assert(string.len(noctalia.getColor("primary")) == 7)
-assert(string.sub(noctalia.getColor("primary"), 1, 1) == "#")
-assert(noctalia.getColor("surface") ~= nil)
-assert(noctalia.getColor("on_surface") ~= nil)
-assert(noctalia.getColor("missing_role") == nil)
-noctalia.setWallpaperMask("DP-1", {
+assert(chiroptera.getSetting("shell.offline_mode"))
+assert(chiroptera.wallpaperPath("DP-1") == "/tmp/wallpaper.png")
+assert(chiroptera.wallpaperPath("missing") == nil)
+assert(type(chiroptera.getColor("primary")) == "string")
+assert(string.len(chiroptera.getColor("primary")) == 7)
+assert(string.sub(chiroptera.getColor("primary"), 1, 1) == "#")
+assert(chiroptera.getColor("surface") ~= nil)
+assert(chiroptera.getColor("on_surface") ~= nil)
+assert(chiroptera.getColor("missing_role") == nil)
+chiroptera.setWallpaperMask("DP-1", {
   path = "/tmp/mask.png",
   wallpaperPath = "/tmp/wallpaper.png",
 })
-noctalia.setWallpaperMask("DP-1", nil)
+chiroptera.setWallpaperMask("DP-1", nil)
 )";
   if (!expect(host.exec("=direct-argv", source), "argv call should be accepted")) {
     return 1;
@@ -98,7 +98,7 @@ noctalia.setWallpaperMask("DP-1", nil)
   testPalette.primary = rgba(1.0F, 0.0F, 0.0F, 1.0F);
   setPalette(testPalette);
   ok = expect(
-           host.exec("=get-color", "assert(noctalia.getColor('primary') == '#FF0000')\n"),
+           host.exec("=get-color", "assert(chiroptera.getColor('primary') == '#FF0000')\n"),
            "getColor should return updated color from active palette"
        )
       && ok;
@@ -106,8 +106,8 @@ noctalia.setWallpaperMask("DP-1", nil)
   ok = expect(
            host.exec(
                "=get-color-restored",
-               "assert(noctalia.getColor('primary') ~= '#FF0000')\n"
-               "assert(noctalia.getColor('invalid_role') == nil)\n"
+               "assert(chiroptera.getColor('primary') ~= '#FF0000')\n"
+               "assert(chiroptera.getColor('invalid_role') == nil)\n"
            ),
            "getColor should track restored palette and return nil for invalid roles"
        )

@@ -1130,14 +1130,14 @@ namespace greeter {
       return;
     }
     ipc.bind(
-        noctalia::cli::msg::greeterSync,
+        chiroptera::cli::msg::greeterSync,
         [&config, resolvedThemeMode = std::move(resolvedThemeMode), platform,
          logindOnSystemBus = std::move(logindOnSystemBus)](const std::string& args) -> std::string {
           if (!StringUtils::trim(args).empty()) {
             return "error: usage: greeter-sync\n";
           }
           if (!appearanceSyncAvailable(config.config().shell.greeterSync)) {
-            return "error: noctalia greeter is not installed\n";
+            return "error: chiroptera greeter is not installed\n";
           }
           const bool logind = logindOnSystemBus != nullptr && logindOnSystemBus();
           const GreeterSyncLaunch launch =

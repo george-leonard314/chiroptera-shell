@@ -206,22 +206,22 @@ void OsdOverlay::initialize(WaylandConnection& wayland, ConfigService* config, R
 }
 
 void OsdOverlay::registerIpc(IpcService& ipc) {
-  ipc.bind(noctalia::cli::msg::osdEnable, [this](const std::string& args) -> std::string {
-    if (!noctalia::ipc::splitWords(args).empty()) {
+  ipc.bind(chiroptera::cli::msg::osdEnable, [this](const std::string& args) -> std::string {
+    if (!chiroptera::ipc::splitWords(args).empty()) {
       return "error: osd-enable takes no arguments\n";
     }
     setEnabledOverride(true);
     return "ok\n";
   });
-  ipc.bind(noctalia::cli::msg::osdDisable, [this](const std::string& args) -> std::string {
-    if (!noctalia::ipc::splitWords(args).empty()) {
+  ipc.bind(chiroptera::cli::msg::osdDisable, [this](const std::string& args) -> std::string {
+    if (!chiroptera::ipc::splitWords(args).empty()) {
       return "error: osd-disable takes no arguments\n";
     }
     setEnabledOverride(false);
     return "ok\n";
   });
-  ipc.bind(noctalia::cli::msg::osdToggle, [this](const std::string& args) -> std::string {
-    if (!noctalia::ipc::splitWords(args).empty()) {
+  ipc.bind(chiroptera::cli::msg::osdToggle, [this](const std::string& args) -> std::string {
+    if (!chiroptera::ipc::splitWords(args).empty()) {
       return "error: osd-toggle takes no arguments\n";
     }
     setEnabledOverride(!isEnabled());
@@ -491,7 +491,7 @@ void OsdOverlay::ensureSurfaces() {
     }
 
     auto surfaceConfig = LayerSurfaceConfig{
-        .nameSpace = "noctalia-osd",
+        .nameSpace = "chiroptera-osd",
         .layer = LayerShellLayer::Overlay,
         .anchor = anchor,
         .width = surfaceWidth,

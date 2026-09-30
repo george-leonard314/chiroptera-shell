@@ -402,7 +402,7 @@ void Wallpaper::onGpuResourcesInvalidated() {
 
 bool Wallpaper::initialize(
     WaylandConnection& wayland, ConfigService* config, RenderContext* renderContext, SharedTextureCache* textureCache,
-    noctalia::theme::ThemeService* themeService
+    chiroptera::theme::ThemeService* themeService
 ) {
   m_wayland = &wayland;
   m_config = config;
@@ -711,20 +711,20 @@ void Wallpaper::registerIpc(IpcService& ipc) {
     return switchResponse(switchWallpaperTo(action, connector));
   };
 
-  ipc.bind(noctalia::cli::msg::wallpaperRandom, [switchWallpaperHandler](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::wallpaperRandom, [switchWallpaperHandler](const std::string& args) -> std::string {
     return switchWallpaperHandler(PickWallpaper::Random, args);
   });
 
-  ipc.bind(noctalia::cli::msg::wallpaperNext, [switchWallpaperHandler](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::wallpaperNext, [switchWallpaperHandler](const std::string& args) -> std::string {
     return switchWallpaperHandler(PickWallpaper::Next, args);
   });
 
-  ipc.bind(noctalia::cli::msg::wallpaperPrevious, [switchWallpaperHandler](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::wallpaperPrevious, [switchWallpaperHandler](const std::string& args) -> std::string {
     return switchWallpaperHandler(PickWallpaper::Previous, args);
   });
 
   ipc.bind(
-      noctalia::cli::msg::wallpaperGet,
+      chiroptera::cli::msg::wallpaperGet,
       [this, validateOutputConnector](const std::string& args) -> std::string {
         if (m_config == nullptr) {
           return "error: wallpaper service not initialized\n";
@@ -748,7 +748,7 @@ void Wallpaper::registerIpc(IpcService& ipc) {
       IpcService::HandlerOptions{.actionEditorVisibility = IpcService::ActionEditorVisibility::Hidden}
   );
   ipc.bind(
-      noctalia::cli::msg::wallpaperSet, [this, &ipc, validateOutputConnector](const std::string& args) -> std::string {
+      chiroptera::cli::msg::wallpaperSet, [this, &ipc, validateOutputConnector](const std::string& args) -> std::string {
         if (m_config == nullptr) {
           return "error: wallpaper service not initialized\n";
         }
@@ -1230,7 +1230,7 @@ void Wallpaper::createInstance(const WaylandOutput& output) {
   instance->description = output.description;
 
   auto surfaceConfig = LayerSurfaceConfig{
-      .nameSpace = "noctalia-wallpaper",
+      .nameSpace = "chiroptera-wallpaper",
       .layer = LayerShellLayer::Background,
       .anchor = LayerShellAnchor::Top | LayerShellAnchor::Bottom | LayerShellAnchor::Left | LayerShellAnchor::Right,
       .width = 0,

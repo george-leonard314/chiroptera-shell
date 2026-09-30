@@ -37,7 +37,7 @@
 #include <variant>
 #include <vector>
 
-namespace noctalia::theme {
+namespace chiroptera::theme {
 
   namespace {
 
@@ -1756,4 +1756,4 @@ namespace noctalia::theme {
     return ok;
   }
 
-} // namespace noctalia::theme
+} // namespace chiroptera::theme

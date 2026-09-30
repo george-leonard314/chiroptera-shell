@@ -431,7 +431,7 @@ void CalendarService::notifyGoogleConnectFailure(const std::string& body) const 
   m_notifications->addInternal(
       i18n::tr("notifications.internal.calendar"),
       i18n::tr("notifications.internal.calendar-google-connect-failed-title"), body, Urgency::Critical,
-      kDefaultNotificationTimeout * 2, std::string("noctalia-glyph:calendar-x")
+      kDefaultNotificationTimeout * 2, std::string("chiroptera-glyph:calendar-x")
   );
 }
 
@@ -443,7 +443,7 @@ void CalendarService::notifyGoogleCredentialLocked() const {
   m_notifications->addInternal(
       i18n::tr("notifications.internal.calendar"), i18n::tr("notifications.internal.calendar-credential-locked-title"),
       i18n::tr("notifications.internal.calendar-credential-locked-body"), Urgency::Normal,
-      kDefaultNotificationTimeout * 2, std::string("noctalia-glyph:key")
+      kDefaultNotificationTimeout * 2, std::string("chiroptera-glyph:key")
   );
 }
 
@@ -1342,7 +1342,7 @@ std::filesystem::path CalendarService::cacheFilePath() {
   } else {
     base = "/tmp";
   }
-  return base / "noctalia" / "calendar" / "events.enc";
+  return base / "chiroptera" / "calendar" / "events.enc";
 }
 
 std::filesystem::path CalendarService::legacyCacheFilePath() {

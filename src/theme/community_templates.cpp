@@ -23,13 +23,13 @@
 #include <unordered_set>
 #include <utility>
 
-namespace noctalia::theme {
+namespace chiroptera::theme {
 
   namespace {
 
     constexpr Logger kLog("community_templates");
     constexpr std::string_view kCatalogUrl = "https://api.noctalia.dev/templates";
-    constexpr std::string_view kCacheMetadataFilename = ".noctalia-cache.json";
+    constexpr std::string_view kCacheMetadataFilename = ".chiroptera-cache.json";
 
     struct CommunityTemplateFile {
       std::string name;
@@ -904,7 +904,7 @@ namespace noctalia::theme {
     const std::string state = FileUtils::stateDir();
     if (!state.empty())
       return std::filesystem::path(state) / "community-templates";
-    return std::filesystem::path("/tmp") / "noctalia" / "community-templates";
+    return std::filesystem::path("/tmp") / "chiroptera" / "community-templates";
   }
 
   std::filesystem::path communityTemplateDir(std::string_view id) {
@@ -921,4 +921,4 @@ namespace noctalia::theme {
     });
   }
 
-} // namespace noctalia::theme
+} // namespace chiroptera::theme

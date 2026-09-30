@@ -611,7 +611,7 @@ void WindowSwitcher::initialize(
 }
 
 void WindowSwitcher::registerIpc(IpcService& ipc) {
-  ipc.bind(noctalia::cli::msg::windowSwitcher, [this](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::windowSwitcher, [this](const std::string& args) -> std::string {
     const std::string token = StringUtils::trim(args);
     if (token == "close" || token == "hide") {
       if (m_active) {
@@ -1392,7 +1392,7 @@ void WindowSwitcher::ensureSurface() {
   inst->uiLayoutScale = shellUiScale(m_config);
 
   auto config = LayerSurfaceConfig{
-      .nameSpace = "noctalia-window-switcher",
+      .nameSpace = "chiroptera-window-switcher",
       .layer = LayerShellLayer::Overlay,
       .anchor = LayerShellAnchor::Top | LayerShellAnchor::Bottom | LayerShellAnchor::Left | LayerShellAnchor::Right,
       .width = 0,

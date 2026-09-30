@@ -47,7 +47,7 @@
 namespace {
 
   constexpr Logger kLog("screenshot");
-  constexpr const char* kScreenshotPathEnv = "NOCTALIA_SCREENSHOT_PATH";
+  constexpr const char* kScreenshotPathEnv = "CHIROPTERA_SCREENSHOT_PATH";
   constexpr const char* kStateOwner = "screenshot";
   constexpr const char* kLastRegionKey = "last_region";
   constexpr const char* kAnnotateStateOwner = "annotate";
@@ -711,7 +711,7 @@ ScreenshotService::OutputOptions ScreenshotService::outputOptionsFromConfig(cons
 }
 
 void ScreenshotService::registerIpc(IpcService& ipc, const ConfigService& configService) {
-  ipc.bind(noctalia::cli::msg::screenshotRegion, [this, &configService](const std::string& /*args*/) -> std::string {
+  ipc.bind(chiroptera::cli::msg::screenshotRegion, [this, &configService](const std::string& /*args*/) -> std::string {
     if (!available()) {
       return "error: screen capture is not available on this compositor\n";
     }
@@ -726,7 +726,7 @@ void ScreenshotService::registerIpc(IpcService& ipc, const ConfigService& config
     return "ok\n";
   });
 
-  ipc.bind(noctalia::cli::msg::screenshotFullscreen, [this, &configService](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::screenshotFullscreen, [this, &configService](const std::string& args) -> std::string {
     if (!available()) {
       return "error: screen capture is not available on this compositor\n";
     }
@@ -765,7 +765,7 @@ void ScreenshotService::registerIpc(IpcService& ipc, const ConfigService& config
     return "ok\n";
   });
 
-  ipc.bind(noctalia::cli::msg::screenshotAnnotate, [this, &configService](const std::string& /*args*/) -> std::string {
+  ipc.bind(chiroptera::cli::msg::screenshotAnnotate, [this, &configService](const std::string& /*args*/) -> std::string {
     if (!available()) {
       return "error: screen capture is not available on this compositor\n";
     }
@@ -782,7 +782,7 @@ void ScreenshotService::registerIpc(IpcService& ipc, const ConfigService& config
 
   // The live annotator draws over running apps, so it opens without screencopy;
   // only its Freeze action needs capture support. With a path it edits that image instead.
-  ipc.bind(noctalia::cli::msg::annotate, [this, &ipc, &configService](const std::string& args) -> std::string {
+  ipc.bind(chiroptera::cli::msg::annotate, [this, &ipc, &configService](const std::string& args) -> std::string {
     if (overlayBusy()) {
       return "error: a screenshot overlay is already active\n";
     }
@@ -1859,11 +1859,11 @@ ScreenshotService::makeScreenshotPath(const OutputOptions& options, const std::s
 }
 
 void ScreenshotService::notifySaved(const std::filesystem::path& path) {
-  m_notifications.addInternal("Noctalia", "Screenshot saved", path.string());
+  m_notifications.addInternal("Chiroptera", "Screenshot saved", path.string());
 }
 
 void ScreenshotService::notifyError(const std::string& message) {
-  m_notifications.addInternal("Noctalia", "Screenshot failed", message, Urgency::Critical);
+  m_notifications.addInternal("Chiroptera", "Screenshot failed", message, Urgency::Critical);
 }
 
 void ScreenshotService::setSoundPlayer(SoundPlayer* soundPlayer) { m_soundPlayer = soundPlayer; }
