@@ -2,8 +2,9 @@
 # Fails if any reference to the upstream name survives outside the allowlist.
 # Allowed: the upstream GitHub org, upstream domains, the separate greeter package,
 # official plugin ids (author namespace "noctalia"), lines marked <!-- keep --> or
-# noctalia-compat, the MIT license and credits, vendored third_party code, the alias
-# test that names both globals on purpose, and this tooling directory.
+# noctalia-compat, web links (rename.sh leaves them pointing upstream), the MIT license
+# and credits, vendored third_party code, the alias test that names both globals on
+# purpose, and this tooling directory.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
@@ -12,7 +13,9 @@ allow="noctalia-dev|noctalia-greeter|noctalia\.dev|noctalia-compat|NOCTALIA_GREE
 status=0
 
 leftovers=$(find . -type f -not -path './.git/*' -not -path './build*/*' -print0 \
-  | xargs -0 grep -HnI -i 'noctalia' -- 2>/dev/null | grep -vE "$allow" || true)
+  | xargs -0 grep -HnI -i 'noctalia' -- 2>/dev/null \
+  | sed -E 's#(https?|wss?)://[^[:space:]"'"'"'`<>()[{}\\]+##g' \
+  | grep -i 'noctalia' | grep -vE "$allow" || true)
 if [ -n "$leftovers" ]; then
   echo "check-rename: leftover references:" >&2
   echo "$leftovers" >&2

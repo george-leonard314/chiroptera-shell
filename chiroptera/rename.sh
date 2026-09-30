@@ -32,12 +32,23 @@ mapfile -d '' files < <(
     | { xargs -0 -r grep -lIZ -i 'noctalia' -- 2>/dev/null || true; }
 )
 if [ "${#files[@]}" -gt 0 ]; then
+  #    Web links are left alone: they point at pages, badges, donation accounts and package
+  #    repositories that exist only under the upstream name, and renaming them breaks them.
+  #    Only the text between links is rewritten, except on placeholder lines, whose made-up
+  #    example links (github.com/me/noctalia-plugins) are UI hint text.
   perl -pi -e '
       next if /<!-- keep -->|noctalia-compat/;
       s{github\.com/noctalia-dev/noctalia(?![A-Za-z0-9-])}{github.com/'"$GH_USER"'/chiroptera-shell}g;
-      s{noctalia(?!-dev\b|-greeter|\.dev\b|-compat|/(?:'"$plugins"')\b)}{chiroptera}g;
-      s/Noctalia/Chiroptera/g;
-      s/NOCTALIA(?!_GREETER)/CHIROPTERA/g;
+      my @parts = /placeholder/ ? ($_)
+                : split m{((?:https?|wss?)://[^\s"'"'"'`<>()\[\]{}\\]+)}, $_, -1;
+      for (my $i = 0; $i < @parts; $i += 2) {
+        for ($parts[$i]) {
+          s{noctalia(?!-dev\b|-greeter|\.dev\b|-compat|/(?:'"$plugins"')\b)}{chiroptera}g;
+          s/Noctalia/Chiroptera/g;
+          s/NOCTALIA(?!_GREETER)/CHIROPTERA/g;
+        }
+      }
+      $_ = join "", @parts;
     ' "${files[@]}"
 fi
 
